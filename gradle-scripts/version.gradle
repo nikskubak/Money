@@ -1,0 +1,49 @@
+def gitLastCommitSha = { ->
+    try {
+        def outputStream = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--short', 'HEAD'
+            standardOutput = outputStream
+        }
+        return outputStream.toString().trim()
+    } catch (ignored) {
+        return null
+    }
+}
+
+def versionMajor = 0
+def versionMinor = 0
+def versionPatch = 0
+def versionFix = 0
+def versionSuffix = gitLastCommitSha()
+
+android {
+
+    defaultConfig {
+        versionCode versionMajor * 1000000 + versionMinor * 100000 + versionPatch * 10000 + versionFix
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionFix}"
+    }
+
+    buildTypes {
+
+        debug {
+            versionNameSuffix "-${versionSuffix}"
+        }
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def buildName = "${variant.mergedFlavor.applicationId}-${variant.mergedFlavor.versionName}-${variant.buildType.name}-${versionSuffix}"
+            def alignedOutputFile = output.outputFile
+            def unalignedOutputFile = output.packageApplication.outputFile
+
+            if (variant.buildType.zipAlignEnabled) {
+                output.outputFile = new File(alignedOutputFile.parent, buildName + ".apk")
+            }
+            output.packageApplication.outputFile = new File(unalignedOutputFile.parent, buildName + "-unaligned" + ".apk")
+        }
+
+    }
+
+}
