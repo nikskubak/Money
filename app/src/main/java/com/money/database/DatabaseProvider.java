@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.artjoker.database.SecureDatabaseProvider;
 import com.artjoker.database.SelectionBuilder;
-import com.fivestar.models.RatingContract;
+import com.fivestar.models.CategoryContract;
 import com.fivestar.utils.ContentProviderConfig;
 
 
@@ -24,7 +24,7 @@ public class DatabaseProvider extends SecureDatabaseProvider {
 
     static {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-        addUri(URI_MATCHER, ContentProviderConfig.AUTHORITY_CONTENT, RatingContract.TABLE_NAME, Config.RATING_DIR_ID, Config.RATING_ITEM_ID);
+        addUri(URI_MATCHER, ContentProviderConfig.AUTHORITY_CONTENT, CategoryContract.TABLE_NAME, Config.RATING_DIR_ID, Config.RATING_ITEM_ID);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         final SelectionBuilder builder = new SelectionBuilder();
         switch (URI_MATCHER.match(uri)) {
             case Config.RATING_DIR_ID:
-                appendSelection(builder, RatingContract.TABLE_NAME, selection, selectionArgs);
+                appendSelection(builder, CategoryContract.TABLE_NAME, selection, selectionArgs);
                 return builder;
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
@@ -59,10 +59,10 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         switch (URI_MATCHER.match(uri)) {
 
             case Config.RATING_DIR_ID:
-                return RatingContract.CONTENT_TYPE;
+                return CategoryContract.CONTENT_TYPE;
 
             case Config.RATING_ITEM_ID:
-                return RatingContract.CONTENT_ITEM_TYPE;
+                return CategoryContract.CONTENT_ITEM_TYPE;
 
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
@@ -77,8 +77,8 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         String tableName;
         switch (URI_MATCHER.match(uri)) {
             case Config.RATING_DIR_ID:
-                contentUri = RatingContract.CONTENT_URI;
-                tableName = RatingContract.TABLE_NAME;
+                contentUri = CategoryContract.CONTENT_URI;
+                tableName = CategoryContract.TABLE_NAME;
                 final Uri insertedUriEvents = buildInsertUri(database, contentUri, tableName, values);
                 getContext().getContentResolver().notifyChange(insertedUriEvents, null);
                 return insertedUriEvents;
