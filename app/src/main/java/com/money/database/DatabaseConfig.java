@@ -5,5 +5,5 @@ package com.money.database;
  */
 public interface DatabaseConfig {
     int VERSION = 1;
-    String NAME = "shoprating.db";
+    String NAME = "money.db";
 }

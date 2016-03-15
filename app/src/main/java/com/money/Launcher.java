@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 
 import com.artjoker.core.activities.AbstractLauncher;
+import com.money.fragments.MainFragment;
 
 /**
  * Created by skuba on 28.02.2016.
@@ -16,17 +17,17 @@ public class Launcher extends AbstractLauncher {
 
     @Override
     protected int getContentViewLayoutResId() {
-        return 0;
+        return R.layout.launcher;
     }
 
     @Override
     protected int getContentViewContainerId() {
-        return 0;
+        return R.id.main_container;
     }
 
     @Override
     protected Fragment getInitFragment() {
-        return null;
+        return new MainFragment();
     }
 
     @Override

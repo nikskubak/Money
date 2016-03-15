@@ -2,16 +2,14 @@ apply plugin: 'com.android.library'
 apply from: "$rootProject.projectDir/gradle-scripts/base.gradle"
 
 android {
-
     buildTypes {
         debug {
-            buildConfigField "String", "AUTHORITY_CONTENT", "\"com.stookroompro\""
+            buildConfigField "String", "AUTHORITY_CONTENT", "\"com.money\""
         }
         release {
-            buildConfigField "String", "AUTHORITY_CONTENT", "\"com.stookroompro\""
+            buildConfigField "String", "AUTHORITY_CONTENT", "\"com.money\""
         }
     }
-
 }
 
 dependencies {
