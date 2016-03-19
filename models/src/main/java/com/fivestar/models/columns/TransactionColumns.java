@@ -1,4 +1,4 @@
-package com.fivestar.models;
+package com.fivestar.models.columns;
 
 /**
  * Created by skuba on 06.03.2016.

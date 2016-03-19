@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -17,11 +16,9 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.SimpleTimeZone;
@@ -34,12 +31,7 @@ import static java.util.Calendar.MONTH;
 import static java.util.Calendar.SECOND;
 import static java.util.Calendar.YEAR;
 
-//TODO REMOVE BEFORE RELEASE!!!
-//  keystore:   SHA1
-//  debug:      BC747E681C531B18B1C82E0B81C5B80230E5046E    Mikle
-//  debug:      0A0E76C3ECB19EB61F4BBE4226C6F4CEAFE38A1B    Anastasia
-//  debug:      96F9EAB2253873031BAD2255CCC098710125E2D9    Alexandr
-//  release:    AE381608DE92BB883B021D92871A4B0D482BDD30
+
 public final class SystemHelper {
     private final Calendar calendar;
     private Context context;

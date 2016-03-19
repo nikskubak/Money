@@ -1,8 +1,9 @@
-package com.fivestar.models;
+package com.fivestar.models.contracts;
 
 import android.net.Uri;
 
 import com.artjoker.core.database.constants.DatabaseTypes;
+import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.utils.ContentProviderHelper;
 
 /**
@@ -14,7 +15,7 @@ public interface CategoryContract extends CategoryColumns, DatabaseTypes {
 
     String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
             + ID + " " + INTEGER + " PRIMARY KEY AUTOINCREMENT , "
-            + NAME + " " + TEXT
+            + NAME + " " + TEXT + " ,"
             + TYPE + " " + TEXT
             + " );";
 

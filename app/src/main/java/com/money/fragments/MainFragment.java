@@ -3,6 +3,7 @@ package com.money.fragments;
 import android.view.View;
 
 import com.artjoker.core.fragments.AbstractBasic;
+import com.fivestar.models.columns.CategoryColumns;
 import com.money.R;
 
 /**
@@ -17,6 +18,15 @@ public class MainFragment extends AbstractBasic {
     @Override
     protected void initViews(View view) {
 
+    }
+
+    @Override
+    protected void initContent() {
+        super.initContent();
+//        ContentValues values = new ContentValues();
+//        values.put(CategoryColumns.NAME, "erery");
+//        values.put(CategoryColumns.TYPE, "erery");
+//        getActivity().getContentResolver().insert(CategoryContract.CONTENT_URI,values);
     }
 
     @Override

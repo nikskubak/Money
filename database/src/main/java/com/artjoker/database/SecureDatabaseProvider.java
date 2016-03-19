@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
-
 import java.util.ArrayList;
 
 import static android.provider.BaseColumns._ID;
@@ -62,6 +61,7 @@ public abstract class SecureDatabaseProvider extends ContentProvider {
 //        SQLiteDatabase.loadLibs(getContext());
         SelectionBuilder.LOG = LOG;
         databaseHelper = getNewDatabaseHelper();
+        getInstance();
         return true;
     }
 

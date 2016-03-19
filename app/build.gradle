@@ -18,14 +18,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-//    splits {
-//        density {
-//            enable true
-//            exclude "ldpi", "tvdpi", "xxxhdpi"
-//            compatibleScreens 'nodpi', 'small', 'normal', 'large', 'xlarge'
-//        }
-//    }
 }
 
 dependencies {
@@ -33,5 +25,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile project(':core')
     compile project(':database')
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile project(':models')
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:cardview-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile('com.mikepenz:materialdrawer:5.1.5@aar') {
+        transitive = true
+    }
 }

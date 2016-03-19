@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Money</string>
+    <string name="item_drawer_costs">Расходы</string>
+    <string name="item_drawer_gains">Доходы</string>
+
+    <string-array name="default_name_categories_costs">
+        <item>Еда</item>
+        <item>Развлечения</item>
+        <item>Транспорт</item>
+        <item>Подарки</item>
+        <item>Гигиена</item>
+    </string-array>
+
+    <string-array name="default_name_categories_gains">
+        <item>Зарплата</item>
+        <item>Банковский счёт</item>
+    </string-array>
+
+    <string name="categoty_type_cost">Расход</string>
+    <string name="categoty_type_gain">Доход</string>
+
 </resources>

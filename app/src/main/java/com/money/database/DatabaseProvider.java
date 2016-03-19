@@ -12,8 +12,8 @@ import android.util.Log;
 
 import com.artjoker.database.SecureDatabaseProvider;
 import com.artjoker.database.SelectionBuilder;
-import com.fivestar.models.CategoryContract;
-import com.fivestar.models.TransactionContract;
+import com.fivestar.models.contracts.CategoryContract;
+import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.utils.ContentProviderConfig;
 
 
@@ -31,6 +31,7 @@ public class DatabaseProvider extends SecureDatabaseProvider {
 
     @Override
     protected SQLiteOpenHelper getNewDatabaseHelper() {
+        Log.e("onCreate", "getNewDatabaseHelper");
         return new DatabaseHelper(getContext());
     }
 
@@ -137,7 +138,7 @@ public class DatabaseProvider extends SecureDatabaseProvider {
     public interface Config {
         int CATEGORY_ITEM_ID = 0x1000;
         int CATEGORY_DIR_ID = 0x1001;
-        int TRANSACTION_ITEM_ID = 0x1002;
-        int TRANSACTION_DIR_ID = 0x1003;
+        int TRANSACTION_ITEM_ID = 0x2002;
+        int TRANSACTION_DIR_ID = 0x2003;
     }
 }
