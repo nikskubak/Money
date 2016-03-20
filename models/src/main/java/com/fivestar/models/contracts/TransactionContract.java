@@ -20,7 +20,7 @@ public interface TransactionContract extends TransactionColumns, DatabaseTypes {
             + CATEGORY + " " + INTEGER + ", "
             + MONEY + " " + REAL + ", "
             + DATE + " " + TEXT + ", "
-            + TYPE + " " + INTEGER + ", "
+            + TYPE + " " + TEXT + ", "
             + "FOREIGN KEY(" + CATEGORY + ") REFERENCES " + CategoryContract.TABLE_NAME + "(" + CategoryColumns.ID + ")"
             + " );";
 

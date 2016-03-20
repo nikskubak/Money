@@ -42,7 +42,7 @@ public class TransactionCursorConverter extends AbstractCursorConverter<Transact
             transaction.setDate(getCursor().getLong(COLUMN_INDEX_DATE));
             transaction.setDescription(getCursor().getString(COLUMN_INDEX_DESCRIPTION));
             transaction.setMoney(getCursor().getDouble(COLUMN_INDEX_MONEY));
-            transaction.setType(getCursor().getInt(COLUMN_INDEX_TYPE));
+            transaction.setType(getCursor().getString(COLUMN_INDEX_TYPE));
         }
         return transaction;
     }

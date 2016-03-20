@@ -9,7 +9,7 @@ public class Transaction {
     int category;
     double money;
     long date;
-    int type;
+    String type;
 
     public int getId() {
         return id;
@@ -51,11 +51,11 @@ public class Transaction {
         this.date = date;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(String type) {
         this.type = type;
     }
 }
