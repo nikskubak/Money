@@ -135,6 +135,11 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         return count;
     }
 
+    @Override
+    public int insertOrUpdate(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        return super.insertOrUpdate(uri, contentValues, selection, selectionArgs);
+    }
+
     public interface Config {
         int CATEGORY_ITEM_ID = 0x1000;
         int CATEGORY_DIR_ID = 0x1001;

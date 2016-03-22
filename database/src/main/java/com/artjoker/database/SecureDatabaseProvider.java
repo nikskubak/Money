@@ -104,7 +104,7 @@ public abstract class SecureDatabaseProvider extends ContentProvider {
         return ContentUris.withAppendedId(contentUri, database.insertOrThrow(tableName, null, contentValues));
     }
 
-    protected int insertOrUpdate(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int insertOrUpdate(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int count = getSimpleSelectionBuilder(uri, selection, selectionArgs).update(getInstance(), contentValues);
         if (count == 0) {
             insert(uri, contentValues);

@@ -30,10 +30,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TransactionContract.CREATE_TABLE);
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_costs),
-                context.getResources().getString(R.string.categoty_type_cost));
+                context.getResources().getString(R.string.category_type_cost));
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_gains),
-                context.getResources().getString(R.string.categoty_type_gain));
+                context.getResources().getString(R.string.category_type_gain));
     }
 
     @Override

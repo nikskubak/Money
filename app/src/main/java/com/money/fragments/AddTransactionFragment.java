@@ -74,7 +74,8 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     }
 
     void startRecyclerView() {
-        adapter = new CategoryRecyclerAdapter(categories, this);
+        adapter = new CategoryRecyclerAdapter(categories);
+        adapter.setListener(this);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewCategory.setLayoutManager(layoutManager);
         recyclerViewCategory.setAdapter(adapter);
@@ -128,12 +129,12 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     }
 
     void showDialogWithCategory() {
-        String names[] = {"A", "B", "C", "D"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogView = (View) inflater.inflate(R.layout.dialog_recycler_view, null);
         RecyclerView dialogRecycler = (RecyclerView) dialogView.findViewById(R.id.dialog_recycler_view_categoty);
-        adapter = new CategoryRecyclerAdapter(categories, this);
+        adapter = new CategoryRecyclerAdapter(categories);
+        adapter.setListener(this);
         layoutManager = new LinearLayoutManager(getActivity());
         dialogRecycler.setAdapter(adapter);
         dialogRecycler.setLayoutManager(layoutManager);
@@ -149,6 +150,11 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
         alertDailog.dismiss();
         insertTransaction(categories.get(position));
+    }
+
+    @Override
+    public void onLongItemClick(Category category) {
+
     }
 
     void insertTransaction(Category category) {

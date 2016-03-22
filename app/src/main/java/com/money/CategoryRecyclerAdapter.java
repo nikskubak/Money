@@ -18,9 +18,8 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
     ArrayList<Category> data;
     OnItemCLickListener listener;
 
-    public CategoryRecyclerAdapter(ArrayList<Category> data, OnItemCLickListener listener) {
+    public CategoryRecyclerAdapter(ArrayList<Category> data) {
         this.data = data;
-        this.listener = listener;
     }
 
     @Override
@@ -59,7 +58,18 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(pos);
+                    if(listener != null) {
+                        listener.onItemClick(pos);
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(listener != null) {
+                        listener.onLongItemClick(data.get(pos));
+                    }
+                    return true;
                 }
             });
             textViewCategoryName = (TextView) itemView.findViewById(R.id.item_category_tv_name);
@@ -76,6 +86,14 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
 
     public interface OnItemCLickListener {
         void onItemClick(int position);
+        void onLongItemClick(Category category);
     }
 
+    public OnItemCLickListener getListener() {
+        return listener;
+    }
+
+    public void setListener(OnItemCLickListener listener) {
+        this.listener = listener;
+    }
 }

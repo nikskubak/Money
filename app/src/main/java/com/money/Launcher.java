@@ -16,6 +16,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.money.fragments.AddCategoryFragment;
 import com.money.fragments.AddTransactionFragment;
 import com.money.fragments.MainFragment;
 
@@ -71,6 +72,7 @@ public class Launcher extends AbstractLauncher {
     void initDrawer() {
         SecondaryDrawerItem itemCosts = new SecondaryDrawerItem().withName(R.string.item_drawer_costs).withIdentifier(Constants.ITEM_DRAWER_COSTS);
         SecondaryDrawerItem itemGains = new SecondaryDrawerItem().withName(R.string.item_drawer_gains).withIdentifier(Constants.ITEM_DRAWER_GAINS);
+        SecondaryDrawerItem itemCategories = new SecondaryDrawerItem().withName(R.string.item_drawer_categories).withIdentifier(Constants.ITEM_DRAWER_CATEGORIES);
 
 //create the drawer and remember the `Drawer` result object
         drawer = new DrawerBuilder()
@@ -79,8 +81,8 @@ public class Launcher extends AbstractLauncher {
                 .withAccountHeader(initDrawerHeader())
                 .addDrawerItems(
                         itemCosts,
-                        new DividerDrawerItem(),
-                        itemGains
+                        itemGains,
+                        itemCategories
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -88,10 +90,16 @@ public class Launcher extends AbstractLauncher {
                         switch ((int)drawerItem.getIdentifier()) {
                             case Constants.ITEM_DRAWER_COSTS:
                                 Toast.makeText(Launcher.this, "costs", Toast.LENGTH_SHORT).show();
+                                drawer.closeDrawer();
 //                                onCommit(new MainFragment(), null);
                                 break;
                             case Constants.ITEM_DRAWER_GAINS:
                                 Toast.makeText(Launcher.this, "gains", Toast.LENGTH_SHORT).show();
+                                drawer.closeDrawer();
+                                break;
+                            case Constants.ITEM_DRAWER_CATEGORIES:
+                                onCommit(new AddCategoryFragment(), null);
+                                drawer.closeDrawer();
                                 break;
                         }
                         return true;
