@@ -15,6 +15,7 @@ import com.artjoker.database.SelectionBuilder;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.utils.ContentProviderConfig;
+import com.fivestar.utils.ContentProviderHelper;
 
 
 /**
@@ -50,9 +51,11 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         }
     }
 
+
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
         final SQLiteDatabase database = getInstance();
         final Cursor cursor = getSimpleSelectionBuilder(uri, selection, selectionArgs).query(database, projection, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -145,5 +148,6 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         int CATEGORY_DIR_ID = 0x1001;
         int TRANSACTION_ITEM_ID = 0x2002;
         int TRANSACTION_DIR_ID = 0x2003;
+
     }
 }

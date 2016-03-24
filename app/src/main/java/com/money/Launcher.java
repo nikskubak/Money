@@ -18,6 +18,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.money.fragments.AddCategoryFragment;
 import com.money.fragments.AddTransactionFragment;
+import com.money.fragments.CostaFragment;
 import com.money.fragments.MainFragment;
 
 /**
@@ -91,7 +92,7 @@ public class Launcher extends AbstractLauncher {
                             case Constants.ITEM_DRAWER_COSTS:
                                 Toast.makeText(Launcher.this, "costs", Toast.LENGTH_SHORT).show();
                                 drawer.closeDrawer();
-//                                onCommit(new MainFragment(), null);
+                                onCommit(new CostaFragment(), null);
                                 break;
                             case Constants.ITEM_DRAWER_GAINS:
                                 Toast.makeText(Launcher.this, "gains", Toast.LENGTH_SHORT).show();

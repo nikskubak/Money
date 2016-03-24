@@ -14,5 +14,6 @@ public class Constants {
 
     public interface LoadersID{
         int LOADER_CATEGORIES = 0;
+        int LOADER_TRANSACTIONS = 1;
     }
 }
