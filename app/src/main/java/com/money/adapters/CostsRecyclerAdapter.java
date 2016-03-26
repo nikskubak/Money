@@ -31,15 +31,15 @@ public class CostsRecyclerAdapter extends CursorRecyclerViewAdapter<CostsRecycle
         TransactionCursorConverter converter = new TransactionCursorConverter();
         converter.setCursor(cursor);
         transaction = converter.getObject();
-        viewHolder.textViewCategory.setText("" + transaction.getCategory());
-        viewHolder.textViewDescription.setText("");
+        viewHolder.textViewCategory.setText("" + transaction.getCategoryName());
+        viewHolder.textViewDescription.setText("description");
         viewHolder.textViewSum.setText("" + transaction.getMoney());
 
     }
 
     @Override
     public CostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_recycler_cost_fragment, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_recycler_cost_fragment, parent, false);
         CostViewHolder holder = new CostViewHolder(view);
         return holder;
     }

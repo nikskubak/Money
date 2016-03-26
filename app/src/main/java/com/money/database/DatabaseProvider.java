@@ -5,6 +5,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -12,10 +13,14 @@ import android.util.Log;
 
 import com.artjoker.database.SecureDatabaseProvider;
 import com.artjoker.database.SelectionBuilder;
+import com.fivestar.models.columns.CategoryColumns;
+import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.utils.ContentProviderConfig;
-import com.fivestar.utils.ContentProviderHelper;
+import com.fivestar.utils.SQLiteHelper;
+
+import java.util.HashMap;
 
 
 /**
@@ -57,7 +62,15 @@ public class DatabaseProvider extends SecureDatabaseProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         final SQLiteDatabase database = getInstance();
-        final Cursor cursor = getSimpleSelectionBuilder(uri, selection, selectionArgs).query(database, projection, sortOrder);
+        final Cursor cursor;
+        if (getType(uri).equals(TransactionContract.CONTENT_TYPE)) {
+            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+            queryBuilder.setTables(SQLiteHelper.selectJoinCategoryAndTransaction());
+            queryBuilder.setProjectionMap(buildColumnMap());
+            cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
+        } else {
+            cursor = getSimpleSelectionBuilder(uri, selection, selectionArgs).query(database, projection, sortOrder);
+        }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -149,5 +162,24 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         int TRANSACTION_ITEM_ID = 0x2002;
         int TRANSACTION_DIR_ID = 0x2003;
 
+    }
+
+    private static HashMap<String, String> buildColumnMap() {
+        HashMap<String, String> map = new HashMap<String, String>();
+        String transactionColumns[] = TransactionColumns.COLUMNS;
+        for (String col : transactionColumns) {
+
+            String qualifiedCol = SQLiteHelper.addTransactionPrefix(col);
+            map.put(qualifiedCol, qualifiedCol + " as " + col);
+        }
+
+        String categorycolumns[] = CategoryColumns.COLUMNS;
+        for (String col : categorycolumns) {
+
+            String qualifiedCol = SQLiteHelper.addCategoryPrefix(col);
+            String alias = qualifiedCol.replace(".", "_");
+            map.put(qualifiedCol, qualifiedCol + " AS " + alias);
+        }
+        return map;
     }
 }

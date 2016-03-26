@@ -12,4 +12,6 @@ public interface TransactionColumns {
     String DATE = "date";
     String TYPE = "type";
 
+    String[] COLUMNS = new String[]{ID, DESCRIPTION, CATEGORY, MONEY, DATE, TYPE};
+
 }

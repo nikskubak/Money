@@ -8,4 +8,6 @@ public interface CategoryColumns {
     String ID = "id";
     String NAME = "name";
     String TYPE = "type_of_category";
+
+    String[] COLUMNS = new String[]{ID,NAME,TYPE};
 }

@@ -28,4 +28,5 @@ public interface TransactionContract extends TransactionColumns, DatabaseTypes {
     Uri CONTENT_URI = ContentProviderHelper.contentUri(TABLE_NAME);
     String CONTENT_TYPE = ContentProviderHelper.contentType(TABLE_NAME);
     String CONTENT_ITEM_TYPE = ContentProviderHelper.contentItemType(TABLE_NAME);
+
 }

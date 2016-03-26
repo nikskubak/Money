@@ -6,7 +6,8 @@ package com.fivestar.models;
 public class Transaction {
     int id;
     String description;
-    int category;
+    int categoryId;
+    String categoryName;
     double money;
     long date;
     String type;
@@ -27,12 +28,12 @@ public class Transaction {
         this.description = description;
     }
 
-    public int getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public double getMoney() {
@@ -57,5 +58,13 @@ public class Transaction {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
