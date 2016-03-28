@@ -2,6 +2,7 @@ package com.money.fragments;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,9 +10,13 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +33,7 @@ import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
+import com.money.views.CustomKeyboardView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,11 +45,13 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 
     Button buttonCategory;
     EditText editTextSum;
+    EditText editTextDescription;
     ArrayList<Category> categories;
     RecyclerView recyclerViewCategory;
     CategoryRecyclerAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
     AlertDialog alertDailog;
+    CustomKeyboardView keyboardView;
 
     @Override
     protected int getLayoutId() {
@@ -54,13 +62,64 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     protected void initViews(View view) {
         buttonCategory = (Button) view.findViewById(R.id.add_transaction_buuton_category);
         editTextSum = (EditText) view.findViewById(R.id.add_transaction_edit_text_sum);
+        editTextDescription = (EditText) view.findViewById(R.id.add_transaction_edit_text_description);
         recyclerViewCategory = (RecyclerView) view.findViewById(R.id.add_transaction_recycler_categoty);
+        keyboardView = (CustomKeyboardView) view.findViewById(R.id.keyboardview);
+        keyboardView.setKeyboard(R.xml.number_keyboard);
+        keyboardView.setListeners();
+        keyboardView.showCustomKeyboard(editTextSum);
+        editTextSum.requestFocus();
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     @Override
     protected void initListeners(View view) {
         super.initListeners(view);
         buttonCategory.setOnClickListener(this);
+        editTextSum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    keyboardView.showCustomKeyboard(v);
+                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                }
+            }
+        });
+        editTextSum.setOnClickListener(this);
+        editTextSum.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                EditText edittext = (EditText) v;
+                int inType = edittext.getInputType();       // Backup the input type
+                edittext.setInputType(InputType.TYPE_NULL); // Disable standard keyboard
+                edittext.onTouchEvent(event);               // Call native handler
+                edittext.setInputType(inType);              // Restore input type
+                return true; // Consume touch event
+            }
+        });
+//        editTextDescription.setOnClickListener(this);
+//        editTextDescription.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                } else {
+//                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                }
+//            }
+//        });
+//        editTextDescription.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                EditText edittext = (EditText) v;
+//                int inType = edittext.getInputType();       // Backup the input type
+//                edittext.setInputType(InputType.TYPE_TEXT_FLAG_AUTO_CORRECT); // Disable standard keyboard
+//                edittext.onTouchEvent(event);               // Call native handler
+//                edittext.setInputType(inType);              // Restore input type
+//                return true; // Consume touch event
+//            }
+//        });
     }
 
     @Override
@@ -163,6 +222,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         values.put(TransactionColumns.MONEY, editTextSum.getText().toString());
         values.put(TransactionColumns.DATE, System.currentTimeMillis());
         values.put(TransactionColumns.TYPE, category.getType());
+        values.put(TransactionColumns.DESCRIPTION, editTextDescription.getText().toString());
         getActivity().getContentResolver().insert(TransactionContract.CONTENT_URI, values);
     }
 
@@ -170,12 +230,22 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_transaction_buuton_category:
-                if(!android.text.TextUtils.isEmpty(editTextSum.getText().toString())) {
+                if (!android.text.TextUtils.isEmpty(editTextSum.getText().toString())) {
                     getActivity().getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Введите сумму", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+//            case R.id.add_transaction_edit_text_description:
+//                editTextSum.setFocusable(false);
+//                editTextDescription.setFocusable(true);
+////                editTextDescription.requestFocus();
+////                editTextDescription.setKeyListener(originalKeyListener);
+////                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+////                imm.showSoftInput(editTextDescription, InputMethodManager.SHOW_IMPLICIT);
+//                break;
+
         }
     }
 }

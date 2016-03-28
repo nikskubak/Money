@@ -32,7 +32,7 @@ public class CostsRecyclerAdapter extends CursorRecyclerViewAdapter<CostsRecycle
         converter.setCursor(cursor);
         transaction = converter.getObject();
         viewHolder.textViewCategory.setText("" + transaction.getCategoryName());
-        viewHolder.textViewDescription.setText("description");
+        viewHolder.textViewDescription.setText("" + (transaction.getDescription() != null ? transaction.getDescription() : ""));
         viewHolder.textViewSum.setText("" + transaction.getMoney());
 
     }

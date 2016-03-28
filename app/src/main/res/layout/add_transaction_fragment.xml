@@ -12,6 +12,32 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp" />
 
+    <com.money.views.CustomKeyboardView
+        android:id="@+id/keyboardview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:keyBackground="@drawable/key_selector"
+        android:keyTextColor="@color/key_color"
+        android:popupLayout="@null"
+        android:visibility="gone" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/add_transaction_edit_text_description"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
