@@ -3,6 +3,7 @@
     <string name="item_drawer_costs">Расходы</string>
     <string name="item_drawer_gains">Доходы</string>
     <string name="item_drawer_categories">Категории</string>
+    <string name="item_drawer_main">Главная</string>
 
     <string-array name="default_name_categories_costs">
         <item>Еда</item>
@@ -20,5 +21,9 @@
     <string name="category_type_cost">Расход</string>
     <string name="category_type_gain">Доход</string>
     <string name="add_category_alert">Введите название категории</string>
+    <string name="add_transaction_hint_sum">Вветите сумму</string>
+    <string name="add_transaction_hint_description">Введите описание</string>
+
+
 
 </resources>

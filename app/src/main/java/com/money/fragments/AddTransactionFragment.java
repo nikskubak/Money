@@ -32,6 +32,7 @@ import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
+import com.money.Launcher;
 import com.money.R;
 import com.money.views.CustomKeyboardView;
 
@@ -125,6 +126,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     @Override
     protected void initContent() {
         super.initContent();
+        ((Launcher)getActivity()).getDrawer().deselect();
     }
 
     @Override
@@ -206,9 +208,10 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
         alertDailog.dismiss();
         insertTransaction(categories.get(position));
+        commit(new CostaFragment(), null);
     }
 
     @Override

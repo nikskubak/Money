@@ -3,14 +3,40 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <android.support.design.widget.TextInputLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/add_transaction_edit_text_sum"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp" />
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/add_transaction_edit_text_sum"
+            android:hint="@string/add_transaction_hint_sum"
+            android:layout_marginTop="10dp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/add_transaction_edit_text_description"
+            android:hint="@string/add_transaction_hint_description"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
 
     <com.money.views.CustomKeyboardView
         android:id="@+id/keyboardview"
@@ -29,14 +55,7 @@
         android:popupLayout="@null"
         android:visibility="gone" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
-        android:id="@+id/add_transaction_edit_text_description"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp" />
+
 
     <Button
         android:layout_width="wrap_content"

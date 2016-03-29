@@ -52,7 +52,7 @@ public class Launcher extends AbstractLauncher {
 
     @Override
     protected Fragment getInitFragment() {
-        return new AddTransactionFragment();
+        return new MainFragment();
     }
 
     @Override
@@ -71,6 +71,7 @@ public class Launcher extends AbstractLauncher {
     }
 
     void initDrawer() {
+        SecondaryDrawerItem itemMain = new SecondaryDrawerItem().withName(R.string.item_drawer_main).withIdentifier(Constants.ITEM_DRAWER_MAIN);
         SecondaryDrawerItem itemCosts = new SecondaryDrawerItem().withName(R.string.item_drawer_costs).withIdentifier(Constants.ITEM_DRAWER_COSTS);
         SecondaryDrawerItem itemGains = new SecondaryDrawerItem().withName(R.string.item_drawer_gains).withIdentifier(Constants.ITEM_DRAWER_GAINS);
         SecondaryDrawerItem itemCategories = new SecondaryDrawerItem().withName(R.string.item_drawer_categories).withIdentifier(Constants.ITEM_DRAWER_CATEGORIES);
@@ -81,6 +82,7 @@ public class Launcher extends AbstractLauncher {
 //                .withToolbar(toolbar)
                 .withAccountHeader(initDrawerHeader())
                 .addDrawerItems(
+                        itemMain,
                         itemCosts,
                         itemGains,
                         itemCategories
@@ -90,7 +92,6 @@ public class Launcher extends AbstractLauncher {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int)drawerItem.getIdentifier()) {
                             case Constants.ITEM_DRAWER_COSTS:
-                                Toast.makeText(Launcher.this, "costs", Toast.LENGTH_SHORT).show();
                                 drawer.closeDrawer();
                                 onCommit(new CostaFragment(), null);
                                 break;
@@ -100,6 +101,10 @@ public class Launcher extends AbstractLauncher {
                                 break;
                             case Constants.ITEM_DRAWER_CATEGORIES:
                                 onCommit(new AddCategoryFragment(), null);
+                                drawer.closeDrawer();
+                                break;
+                            case Constants.ITEM_DRAWER_MAIN:
+                                onCommit(new MainFragment(), null);
                                 drawer.closeDrawer();
                                 break;
                         }
@@ -140,5 +145,13 @@ public class Launcher extends AbstractLauncher {
         }else{
             super.onBackPressed();
         }
+    }
+
+    public Drawer getDrawer() {
+        return drawer;
+    }
+
+    public void setDrawer(Drawer drawer) {
+        this.drawer = drawer;
     }
 }

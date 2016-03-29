@@ -12,6 +12,7 @@ import android.view.View;
 import com.artjoker.core.fragments.AbstractBasic;
 import com.fivestar.models.contracts.TransactionContract;
 import com.money.Constants;
+import com.money.Launcher;
 import com.money.R;
 import com.money.adapters.CostsRecyclerAdapter;
 
