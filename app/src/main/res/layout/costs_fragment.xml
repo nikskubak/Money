@@ -7,9 +7,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/item_drawer_costs"
+        android:text="@string/item_drawer_operations"
         android:id="@+id/cost_fragment_title_costa"
         android:layout_gravity="center_horizontal" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_type_cost"
+            android:id="@+id/add_category_radio_button_cost"
+            />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/category_type_gain"
+            android:id="@+id/add_category_radio_button_gain" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Все"
+            android:id="@+id/add_category_radio_button_all"
+            android:checked="true"/>
+    </RadioGroup>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/cost_fragment_recycler_view"

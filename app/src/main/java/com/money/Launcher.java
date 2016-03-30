@@ -10,14 +10,9 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.money.fragments.AddCategoryFragment;
-import com.money.fragments.AddTransactionFragment;
 import com.money.fragments.CostaFragment;
 import com.money.fragments.MainFragment;
 
@@ -72,8 +67,7 @@ public class Launcher extends AbstractLauncher {
 
     void initDrawer() {
         SecondaryDrawerItem itemMain = new SecondaryDrawerItem().withName(R.string.item_drawer_main).withIdentifier(Constants.ITEM_DRAWER_MAIN);
-        SecondaryDrawerItem itemCosts = new SecondaryDrawerItem().withName(R.string.item_drawer_costs).withIdentifier(Constants.ITEM_DRAWER_COSTS);
-        SecondaryDrawerItem itemGains = new SecondaryDrawerItem().withName(R.string.item_drawer_gains).withIdentifier(Constants.ITEM_DRAWER_GAINS);
+        SecondaryDrawerItem itemCosts = new SecondaryDrawerItem().withName(R.string.item_drawer_operations).withIdentifier(Constants.ITEM_DRAWER_OPERATIONS);
         SecondaryDrawerItem itemCategories = new SecondaryDrawerItem().withName(R.string.item_drawer_categories).withIdentifier(Constants.ITEM_DRAWER_CATEGORIES);
 
 //create the drawer and remember the `Drawer` result object
@@ -84,20 +78,15 @@ public class Launcher extends AbstractLauncher {
                 .addDrawerItems(
                         itemMain,
                         itemCosts,
-                        itemGains,
                         itemCategories
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch ((int)drawerItem.getIdentifier()) {
-                            case Constants.ITEM_DRAWER_COSTS:
+                            case Constants.ITEM_DRAWER_OPERATIONS:
                                 drawer.closeDrawer();
                                 onCommit(new CostaFragment(), null);
-                                break;
-                            case Constants.ITEM_DRAWER_GAINS:
-                                Toast.makeText(Launcher.this, "gains", Toast.LENGTH_SHORT).show();
-                                drawer.closeDrawer();
                                 break;
                             case Constants.ITEM_DRAWER_CATEGORIES:
                                 onCommit(new AddCategoryFragment(), null);
