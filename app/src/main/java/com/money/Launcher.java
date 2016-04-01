@@ -3,7 +3,6 @@ package com.money;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.artjoker.core.activities.AbstractLauncher;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -13,7 +12,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.money.fragments.AddCategoryFragment;
-import com.money.fragments.CostaFragment;
+import com.money.fragments.OperationFragment;
 import com.money.fragments.MainFragment;
 
 /**
@@ -86,7 +85,7 @@ public class Launcher extends AbstractLauncher {
                         switch ((int)drawerItem.getIdentifier()) {
                             case Constants.ITEM_DRAWER_OPERATIONS:
                                 drawer.closeDrawer();
-                                onCommit(new CostaFragment(), null);
+                                onCommit(new OperationFragment(), null);
                                 break;
                             case Constants.ITEM_DRAWER_CATEGORIES:
                                 onCommit(new AddCategoryFragment(), null);

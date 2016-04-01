@@ -2,7 +2,6 @@ package com.money.fragments;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,20 +10,15 @@ import android.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.artjoker.core.fragments.AbstractBasic;
-import com.artjoker.tool.core.SystemHelper;
-import com.artjoker.tool.core.TextUtils;
 import com.fivestar.models.Category;
 import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
@@ -37,7 +31,6 @@ import com.money.R;
 import com.money.views.CustomKeyboardView;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by skuba on 19.03.2016.
@@ -211,7 +204,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 //        Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
         alertDailog.dismiss();
         insertTransaction(categories.get(position));
-        commit(new CostaFragment(), null);
+        commit(new OperationFragment(), null);
     }
 
     @Override

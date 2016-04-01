@@ -11,6 +11,13 @@
         <item>Транспорт</item>
         <item>Подарки</item>
         <item>Гигиена</item>
+        <item>Кафн</item>
+        <item>Здоровье</item>
+        <item>Дом</item>
+        <item>Автомобиль</item>
+        <item>Одежда</item>
+        <item>Связь</item>
+        <item>Спорт</item>
     </string-array>
 
     <string-array name="default_name_categories_gains">
