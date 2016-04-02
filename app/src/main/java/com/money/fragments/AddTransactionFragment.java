@@ -1,6 +1,7 @@
 package com.money.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.database.Cursor;
@@ -15,7 +16,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.artjoker.core.fragments.AbstractBasic;
@@ -31,11 +34,13 @@ import com.money.R;
 import com.money.views.CustomKeyboardView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by skuba on 19.03.2016.
  */
-public class AddTransactionFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks, CategoryRecyclerAdapter.OnItemCLickListener, View.OnClickListener {
+public class AddTransactionFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks, CategoryRecyclerAdapter.OnItemCLickListener,
+        View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     Button buttonCategory;
     EditText editTextSum;
@@ -46,6 +51,9 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     RecyclerView.LayoutManager layoutManager;
     AlertDialog alertDailog;
     CustomKeyboardView keyboardView;
+    ImageView buttonCalendar;
+    String enteredDate;
+
 
     @Override
     protected int getLayoutId() {
@@ -54,6 +62,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 
     @Override
     protected void initViews(View view) {
+        buttonCalendar = (ImageView) view.findViewById(R.id.add_transaction_button_date);
         buttonCategory = (Button) view.findViewById(R.id.add_transaction_buuton_category);
         editTextSum = (EditText) view.findViewById(R.id.add_transaction_edit_text_sum);
         editTextDescription = (EditText) view.findViewById(R.id.add_transaction_edit_text_description);
@@ -71,6 +80,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     protected void initListeners(View view) {
         super.initListeners(view);
         buttonCategory.setOnClickListener(this);
+        buttonCalendar.setOnClickListener(this);
         editTextSum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -119,7 +129,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     @Override
     protected void initContent() {
         super.initContent();
-        ((Launcher)getActivity()).getDrawer().deselect();
+        ((Launcher) getActivity()).getDrawer().deselect();
     }
 
     @Override
@@ -216,7 +226,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         ContentValues values = new ContentValues();
         values.put(TransactionColumns.CATEGORY, category.getId());
         values.put(TransactionColumns.MONEY, editTextSum.getText().toString());
-        values.put(TransactionColumns.DATE, System.currentTimeMillis());
+        values.put(TransactionColumns.DATE, enteredDate == null ? String.valueOf(System.currentTimeMillis()) : enteredDate);
         values.put(TransactionColumns.TYPE, category.getType());
         values.put(TransactionColumns.DESCRIPTION, editTextDescription.getText().toString());
         getActivity().getContentResolver().insert(TransactionContract.CONTENT_URI, values);
@@ -232,6 +242,9 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
                     Toast.makeText(getActivity(), "Введите сумму", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.add_transaction_button_date:
+                showDateDialog();
+                break;
 
 //            case R.id.add_transaction_edit_text_description:
 //                editTextSum.setFocusable(false);
@@ -243,5 +256,19 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 //                break;
 
         }
+    }
+
+    void showDateDialog() {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        enteredDate = String.valueOf(calendar.getTimeInMillis());
+        buttonCalendar.setImageResource(R.drawable.ic_calendar_multiple_check_black_enabled);
     }
 }

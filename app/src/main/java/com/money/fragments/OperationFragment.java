@@ -8,15 +8,16 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.artjoker.core.fragments.AbstractBasic;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.fivestar.models.Category;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
@@ -28,13 +29,14 @@ import com.money.R;
 import com.money.adapters.CostsRecyclerAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by skuba on 24.03.2016.
  */
 public class OperationFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks,
         CompoundButton.OnCheckedChangeListener, CategoryRecyclerAdapter.OnItemCLickListener,
-        View.OnClickListener{
+        View.OnClickListener, DatePickerDialog.OnDateSetListener {
     RecyclerView recyclerView;
     CostsRecyclerAdapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -46,6 +48,8 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
     CategoryRecyclerAdapter categoryRecyclerAdapter;
     AlertDialog alertDailog;
     ImageView imageButtonCategoryFilter;
+    ImageView imageButtonDateFilter;
+    int currentCategoryId;
 
 
     @Override
@@ -60,6 +64,7 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
         radioALL = (RadioButton) view.findViewById(R.id.add_category_radio_button_all);
         recyclerView = (RecyclerView) view.findViewById(R.id.cost_fragment_recycler_view);
         imageButtonCategoryFilter = (ImageView) view.findViewById(R.id.operation_button_category_filter);
+        imageButtonDateFilter = (ImageView) view.findViewById(R.id.operation_button_date_filter);
         radioGroup = (RadioGroup) view.findViewById(R.id.operation_radio_group);
     }
 
@@ -70,11 +75,13 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
         radioGain.setOnCheckedChangeListener(this);
         radioCost.setOnCheckedChangeListener(this);
         imageButtonCategoryFilter.setOnClickListener(this);
+        imageButtonDateFilter.setOnClickListener(this);
     }
 
     @Override
     protected void initContent() {
         super.initContent();
+        currentCategoryId = Constants.CATEGORY_NOT_ENTERED;
         categories = new ArrayList<>();
         getLoaderManager().initLoader(
                 Constants.LoadersID.LOADER_TRANSACTIONS,
@@ -82,15 +89,14 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
                 this
         ).forceLoad();
 
-        DatabaseUtils.getTransactionsFromDB(null, null, null, null);
-        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), null, null, 2);
-        DatabaseUtils.getTransactionsFromDB(null, "123654", "457896", 3);
-        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), "123654", "457896", null);
-        DatabaseUtils.getTransactionsFromDB(null, null, null, 3);
-        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), null, null, null);
-        DatabaseUtils.getTransactionsFromDB(null, "123654", "457896", null);
-        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), "123654", "457896", 5);
-
+//        DatabaseUtils.getTransactionsFromDB(null, null, null, null);
+//        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), null, null, 2);
+//        DatabaseUtils.getTransactionsFromDB(null, "123654", "457896", 3);
+//        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), "123654", "457896", null);
+//        DatabaseUtils.getTransactionsFromDB(null, null, null, 3);
+//        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), null, null, null);
+//        DatabaseUtils.getTransactionsFromDB(null, "123654", "457896", null);
+//        DatabaseUtils.getTransactionsFromDB(getResources().getString(R.string.category_type_gain), "123654", "457896", 5);
 
     }
 
@@ -217,10 +223,35 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.operation_button_category_filter:
                 getActivity().getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
                 break;
+            case R.id.operation_button_date_filter:
+                showDatePickerDialog();
+                break;
         }
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.set(year, monthOfYear, dayOfMonth);
+        endDate.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+
+        getLoaderManager().restartLoader(
+                Constants.LoadersID.LOADER_TRANSACTIONS,
+                DatabaseUtils.getTransactionsFromDB(null, String.valueOf(startDate.getTimeInMillis()), String.valueOf(endDate.getTimeInMillis()), null),
+                this
+        ).forceLoad();
+
+        Log.e("datePicker", "start = " + startDate.getTimeInMillis() + " end = " + endDate.getTimeInMillis());
+    }
+
+    void showDatePickerDialog(){
+        DatePickerDialog datePickerDialog = new DatePickerDialog();
+        datePickerDialog.setOnDateSetListener(this);
+        datePickerDialog.show(getFragmentManager(), getResources().getString(R.string.operation_calendar_title));
     }
 }

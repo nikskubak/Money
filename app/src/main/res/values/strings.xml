@@ -30,6 +30,7 @@
     <string name="add_category_alert">Введите название категории</string>
     <string name="add_transaction_hint_sum">Вветите сумму</string>
     <string name="add_transaction_hint_description">Введите описание</string>
+    <string name="operation_calendar_title">Выберите дату</string>
 
 
 
