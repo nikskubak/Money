@@ -2,6 +2,7 @@ package com.money;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.View;
 
 import com.artjoker.core.activities.AbstractLauncher;
@@ -20,6 +21,7 @@ import com.money.fragments.MainFragment;
  */
 public class Launcher extends AbstractLauncher {
 
+    private PowerManager.WakeLock wakeLock;
     Drawer drawer;
 
     @Override
