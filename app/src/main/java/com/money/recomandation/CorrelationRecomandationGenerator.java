@@ -33,6 +33,8 @@ public class CorrelationRecomandationGenerator {
         this.context = context;
         this.startDate = startDate;
         this.endDate = endDate;
+        firstCategoryDaySumValues = new ArrayList<>();
+        secondCategoryDaySumValues = new ArrayList<>();
     }
 
     void startAnalysis() {
@@ -95,13 +97,22 @@ public class CorrelationRecomandationGenerator {
     void convertCursor(Cursor cursor){
         if (cursor != null) {
             TransactionCursorConverter converter = new TransactionCursorConverter();
+            Transaction currentTransaction;
             for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                 converter.setCursor(cursor);
-                converter.getObject().getMoney();
+                currentTransaction = converter.getObject();
+                if(isConsistDay(currentTransaction.getDate())){
+                    //надо просуммировать
+                }
                 /////////////// тут нужно сконвертирловать транзакции для определенной категории, чтобы потом посчтить сумму транзакций за каждый день
             }
         }
 
+    }
+
+    boolean isConsistDay(long date){
+        //проверка на то, что транзакция совершенна в конкретный день. Нужно для нахождения общей суммы за день
+        return true;
     }
 
 }
