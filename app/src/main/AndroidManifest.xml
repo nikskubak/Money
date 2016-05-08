@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".RecomandationIntentSerice"
+            android:enabled="true"
+            android:exported="false" />
+
         <provider
             android:name="com.money.database.DatabaseProvider"
             android:authorities="com.money"

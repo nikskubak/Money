@@ -4,12 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.fivestar.models.columns.CategoryColumns;
+import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.money.R;
+
+import java.util.Calendar;
 
 
 /**
@@ -34,6 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_gains),
                 context.getResources().getString(R.string.category_type_gain));
+        initDefaultTransactions(db,
+                1,
+                context.getResources().getString(R.string.category_type_cost));
+        initDefaultTransactions(db,
+                2,
+                context.getResources().getString(R.string.category_type_cost));
     }
 
     @Override
@@ -51,6 +61,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(CategoryColumns.NAME, names[i]);
             values.put(CategoryColumns.TYPE, type);
             db.insert(CategoryContract.TABLE_NAME, null, values);
+        }
+    }
+
+    void initDefaultTransactions(SQLiteDatabase db, int category_id, String type) {
+        ContentValues values;
+        for (int i = 0; i < 4; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2016,4,8 + 2*i,0,0,1 + i);
+            values = new ContentValues();
+//            long date = System.currentTimeMillis() + ((i * DateUtils.DAY_IN_MILLIS)/8);
+            values.put(TransactionColumns.CATEGORY, category_id);
+            values.put(TransactionColumns.MONEY, i % 3 == 0 ? 10 : 1);
+            values.put(TransactionColumns.DATE, calendar.getTime().getTime());
+            values.put(TransactionColumns.TYPE, type);
+            values.put(TransactionColumns.DESCRIPTION, "description #" + i);
+            db.insert(TransactionContract.TABLE_NAME, null, values);
         }
     }
 }

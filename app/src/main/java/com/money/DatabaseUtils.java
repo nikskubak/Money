@@ -78,7 +78,7 @@ public class DatabaseUtils {
         }
         bundle.putString(Constants.TRANSACTION_SELECTION, selection.toString());
         bundle.putStringArray(Constants.TRANSACTION_SELECTION_ARGS, selectionArgs.toArray(new String[selectionArgs.size()]));
-        Log.e("getTransactionsFromDB", "selection = " + selection.toString() + " selectionArgs = " + selectionArgs.toString());
+//        Log.e("getTransactionsFromDB", "selection = " + selection.toString() + " selectionArgs = " + selectionArgs.toString());
         return bundle;
     }
 }

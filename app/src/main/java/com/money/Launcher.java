@@ -1,8 +1,11 @@
 package com.money;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.artjoker.core.activities.AbstractLauncher;
@@ -15,6 +18,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.money.fragments.AddCategoryFragment;
 import com.money.fragments.OperationFragment;
 import com.money.fragments.MainFragment;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by skuba on 28.02.2016.
@@ -34,6 +40,8 @@ public class Launcher extends AbstractLauncher {
         super.initContent();
         new DrawerBuilder().withActivity(this).build();
         initDrawer();
+        startRecomandationService();
+
     }
 
     @Override
@@ -84,7 +92,7 @@ public class Launcher extends AbstractLauncher {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        switch ((int)drawerItem.getIdentifier()) {
+                        switch ((int) drawerItem.getIdentifier()) {
                             case Constants.ITEM_DRAWER_OPERATIONS:
                                 drawer.closeDrawer();
                                 onCommit(new OperationFragment(), null);
@@ -111,7 +119,7 @@ public class Launcher extends AbstractLauncher {
 //        result.setSelection(1, true);
     }
 
-    AccountHeader initDrawerHeader(){
+    AccountHeader initDrawerHeader() {
         return new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.material_drawer_header)
@@ -130,9 +138,9 @@ public class Launcher extends AbstractLauncher {
     @Override
     public void onBackPressed() {
 
-        if(drawer.isDrawerOpen()){
+        if (drawer.isDrawerOpen()) {
             drawer.closeDrawer();
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -143,5 +151,19 @@ public class Launcher extends AbstractLauncher {
 
     public void setDrawer(Drawer drawer) {
         this.drawer = drawer;
+    }
+
+    void startRecomandationService() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2016,4,8,0,0,0);
+        Date startDate = new Date(calendar.getTime().getTime());
+        Date finisDate = new Date(startDate.getTime() + 30 * DateUtils.DAY_IN_MILLIS);
+        Log.e("service_date", startDate.toString());
+        Log.e("service_date", finisDate.toString());
+        Intent serviceIntent = new Intent(this, RecomandationIntentSerice.class);
+        serviceIntent.putExtra(Constants.RECOMANDATION_SERVICE_TAG, Constants.RECOMANDATION_SERVICE_CORRELATION_VALUE);
+        serviceIntent.putExtra(Constants.START_DATE_TAG, startDate.getTime());
+        serviceIntent.putExtra(Constants.FINISH_DATE_TAG, finisDate.getTime());
+        startService(serviceIntent);
     }
 }
