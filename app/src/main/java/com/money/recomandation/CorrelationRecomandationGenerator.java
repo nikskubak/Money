@@ -1,6 +1,7 @@
 package com.money.recomandation;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Loader;
 import android.database.Cursor;
@@ -11,6 +12,7 @@ import android.util.Log;
 import com.fivestar.models.Category;
 import com.fivestar.models.Transaction;
 import com.fivestar.models.contracts.CategoryContract;
+import com.fivestar.models.contracts.RecommendationContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
 import com.fivestar.models.converters.TransactionCursorConverter;
@@ -35,6 +37,7 @@ public class CorrelationRecomandationGenerator {
     long startDate, endDate;
     ArrayList<Double> firstCategoryDaySumValues;
     ArrayList<Double> secondCategoryDaySumValues;
+    ArrayList<Category> categories;
     int countOfDay;
     int indexOfCurrentDay;
 
@@ -47,6 +50,7 @@ public class CorrelationRecomandationGenerator {
 
         firstCategoryDaySumValues = new ArrayList<>(countOfDay);
         secondCategoryDaySumValues = new ArrayList<>(countOfDay);
+        categories = new ArrayList<>();
     }
 
     ArrayList<Integer> getCategoryIds() {
@@ -56,6 +60,7 @@ public class CorrelationRecomandationGenerator {
             CategoryCursorConverter converter = new CategoryCursorConverter();
             for (categoryCursor.moveToFirst(); !categoryCursor.isAfterLast(); categoryCursor.moveToNext()) {
                 converter.setCursor(categoryCursor);
+                categories.add(converter.getObject());
                 categoryIds.add(converter.getObject().getId());
             }
         }
@@ -102,11 +107,39 @@ public class CorrelationRecomandationGenerator {
             if (iterator.getFirstCategory() == 1 && iterator.getSecondCategory() == 2) {
                 DatabaseUtils.logCursor(firstCategoryTransactionsCursor);
                 firstCategoryDaySumValues = convertCursor(firstCategoryTransactionsCursor);
-                DatabaseUtils.logCursor(secondCategoryTransactionsCursor);
                 secondCategoryDaySumValues = convertCursor(secondCategoryTransactionsCursor);
-            }
 
+                DatabaseUtils.logCursor(secondCategoryTransactionsCursor);
+                Log.e("coef correlation", " " + MathHelper.getCorrelationCoefficient(firstCategoryDaySumValues, secondCategoryDaySumValues));
+                Log.e("picks first values", " " + MathHelper.findPickValues(firstCategoryDaySumValues).toString());
+                Log.e("picks second values", " " + MathHelper.findPickValues(secondCategoryDaySumValues).toString());
+
+                if (matchingPicks(MathHelper.findPickValues(firstCategoryDaySumValues), MathHelper.findPickValues(secondCategoryDaySumValues)) >= Constants.PICK_CONSTANT) {
+                    Log.e("matchingPicks", " " + matchingPicks(MathHelper.findPickValues(firstCategoryDaySumValues), MathHelper.findPickValues(secondCategoryDaySumValues)));
+                    //нужно создать табоицу рекомендаций и заносить туда данные
+                    ContentValues values = new ContentValues();
+                    values.put(RecommendationContract.DESCRIPTION, "Существует зависимость между категорией " + iterator.getFirstCategory() +
+                    " и категорией" + iterator.getSecondCategory());
+                    values.put(RecommendationContract.TYPE, "Matching picks");
+                    values.put(RecommendationContract.DATE, System.currentTimeMillis());
+                    values.put(RecommendationContract.VIEWED, 1);
+                    context.getContentResolver().insert(RecommendationContract.CONTENT_URI, values);
+                }
+
+            }
         }
+    }
+
+    private int matchingPicks(ArrayList<Integer> firstPicks, ArrayList<Integer> secondPicks) {
+        int countOfConcurrency = 0;
+        for (int i = 0; i < firstPicks.size(); i++) {
+            for (int j = 0; j < secondPicks.size(); j++) {
+                if (firstPicks.get(i).intValue() == secondPicks.get(j).intValue()) {
+                    countOfConcurrency++;
+                }
+            }
+        }
+        return countOfConcurrency;
     }
 
     ArrayList<Double> convertCursor(Cursor cursor) {
@@ -153,17 +186,6 @@ public class CorrelationRecomandationGenerator {
             }
         }
         return false;
-
-
-//        long startDateInterval = startDate + indexOfCurrentDay * DateUtils.DAY_IN_MILLIS;
-//        long finishDateInterval = startDateInterval + DateUtils.DAY_IN_MILLIS;
-
-//        if (date > startDateInterval && date < finishDateInterval) {
-//            return true;
-//        } else {
-//            indexOfCurrentDay++;
-//            return false;
-//        }
     }
 
 }

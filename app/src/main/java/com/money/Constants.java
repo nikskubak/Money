@@ -23,6 +23,8 @@ public class Constants {
     public static final String START_DATE_TAG = "START_DATE_TAG";
     public static final String FINISH_DATE_TAG = "FINISH_DATE_TAG";
 
+    public static final int PICK_CONSTANT = 2;
+
 
     public interface LoadersID {
         int LOADER_CATEGORIES = 0;

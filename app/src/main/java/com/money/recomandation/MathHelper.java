@@ -47,4 +47,16 @@ public class MathHelper {
                 );
         return correlationCoefficient;
     }
+
+    static public ArrayList<Integer> findPickValues(ArrayList<Double> values) {
+        double MX = getMX(values);
+        double DX = getDX(values);
+        ArrayList<Integer> picks = new ArrayList<>();
+        for (int i = 0; i < values.size(); i++) {
+            if(values.get(i) > MX + Math.sqrt(DX)){
+                picks.add(i);
+            }
+        }
+        return picks;
+    }
 }

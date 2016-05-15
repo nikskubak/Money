@@ -10,6 +10,7 @@ import android.util.Log;
 import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
+import com.fivestar.models.contracts.RecommendationContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.money.R;
 
@@ -32,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.e("onCreate", "onCreate");
         db.execSQL(CategoryContract.CREATE_TABLE);
         db.execSQL(TransactionContract.CREATE_TABLE);
+        db.execSQL(RecommendationContract.CREATE_TABLE);
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_costs),
                 context.getResources().getString(R.string.category_type_cost));
@@ -51,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.e("onCreate", "onUpgrade");
         db.execSQL(CategoryContract.DROP_TABLE);
         db.execSQL(TransactionContract.DROP_TABLE);
+        db.execSQL(RecommendationContract.DROP_TABLE);
         onCreate(db);
     }
 

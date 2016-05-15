@@ -16,6 +16,7 @@ import com.artjoker.database.SelectionBuilder;
 import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
+import com.fivestar.models.contracts.RecommendationContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.utils.ContentProviderConfig;
 import com.fivestar.utils.SQLiteHelper;
@@ -33,6 +34,7 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         addUri(URI_MATCHER, ContentProviderConfig.AUTHORITY_CONTENT, CategoryContract.TABLE_NAME, Config.CATEGORY_DIR_ID, Config.CATEGORY_ITEM_ID);
         addUri(URI_MATCHER, ContentProviderConfig.AUTHORITY_CONTENT, TransactionContract.TABLE_NAME, Config.TRANSACTION_DIR_ID, Config.TRANSACTION_ITEM_ID);
+        addUri(URI_MATCHER, ContentProviderConfig.AUTHORITY_CONTENT, RecommendationContract.TABLE_NAME, Config.RECOMMENDATION_DIR_ID, Config.RECOMMENDATION_ITEM_ID);
     }
 
     @Override
@@ -50,6 +52,9 @@ public class DatabaseProvider extends SecureDatabaseProvider {
                 return builder;
             case Config.TRANSACTION_DIR_ID:
                 appendSelection(builder, TransactionContract.TABLE_NAME, selection, selectionArgs);
+                return builder;
+            case Config.RECOMMENDATION_DIR_ID:
+                appendSelection(builder, RecommendationContract.TABLE_NAME, selection, selectionArgs);
                 return builder;
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
@@ -92,6 +97,12 @@ public class DatabaseProvider extends SecureDatabaseProvider {
             case Config.TRANSACTION_ITEM_ID:
                 return TransactionContract.CONTENT_ITEM_TYPE;
 
+            case Config.RECOMMENDATION_DIR_ID:
+                return RecommendationContract.CONTENT_TYPE;
+
+            case Config.RECOMMENDATION_ITEM_ID:
+                return RecommendationContract.CONTENT_ITEM_TYPE;
+
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
         }
@@ -116,6 +127,12 @@ public class DatabaseProvider extends SecureDatabaseProvider {
                 final Uri insertedUriEventsTransaction = buildInsertUri(database, contentUri, tableName, values);
                 getContext().getContentResolver().notifyChange(insertedUriEventsTransaction, null);
                 return insertedUriEventsTransaction;
+            case Config.RECOMMENDATION_DIR_ID:
+                contentUri = RecommendationContract.CONTENT_URI;
+                tableName = RecommendationContract.TABLE_NAME;
+                final Uri insertedUriEventsRecommendation = buildInsertUri(database, contentUri, tableName, values);
+                getContext().getContentResolver().notifyChange(insertedUriEventsRecommendation, null);
+                return insertedUriEventsRecommendation;
 
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
@@ -143,6 +160,11 @@ public class DatabaseProvider extends SecureDatabaseProvider {
                     throw new IllegalArgumentException("specify selection for location dir update: " + uri);
                 }
                 break;
+            case Config.RECOMMENDATION_ITEM_ID:
+                if (TextUtils.isEmpty(selection)) {
+                    throw new IllegalArgumentException("specify selection for location dir update: " + uri);
+                }
+                break;
             default:
                 Log.w(DatabaseProvider.class.getSimpleName(), "unknown uri: " + uri);
         }
@@ -161,6 +183,8 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         int CATEGORY_DIR_ID = 0x1001;
         int TRANSACTION_ITEM_ID = 0x2002;
         int TRANSACTION_DIR_ID = 0x2003;
+        int RECOMMENDATION_ITEM_ID = 0x3002;
+        int RECOMMENDATION_DIR_ID = 0x3003;
 
     }
 
