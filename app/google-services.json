@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "59905197070",
+    "firebase_url": "https://money-1c47e.firebaseio.com",
+    "project_id": "money-1c47e",
+    "storage_bucket": "money-1c47e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:59905197070:android:11758fd0ea1b685d",
+        "android_client_info": {
+          "package_name": "com.money"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "59905197070-dl5lainco9o658uqblt7saij4t7fvbc6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBE6-wmDxu5i4Fwficia6MjEFGLjQ8pC8E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

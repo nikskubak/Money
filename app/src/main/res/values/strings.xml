@@ -31,7 +31,7 @@
     <string name="add_transaction_hint_sum">Вветите сумму</string>
     <string name="add_transaction_hint_description">Введите описание</string>
     <string name="operation_calendar_title">Выберите дату</string>
-
+    <string name="item_drawer_recommendations">Рекомендации</string>
 
 
 </resources>

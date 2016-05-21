@@ -1,31 +1,33 @@
 package com.money.models;
 
+import com.fivestar.models.Category;
+
 /**
  * Created by skuba on 12.04.2016.
  */
 public class CategoriesPair {
 
-    int firstCategory;
-    int secondCategory;
+    Category firstCategory;
+    Category secondCategory;
 
-    public CategoriesPair(int firstCatrgory, int secondCatrgory) {
-        this.firstCategory = firstCatrgory;
-        this.secondCategory = secondCatrgory;
+    public CategoriesPair(Category firstCategory, Category secondCategory) {
+        this.firstCategory = firstCategory;
+        this.secondCategory = secondCategory;
     }
 
-    public int getFirstCategory() {
+    public Category getFirstCategory() {
         return firstCategory;
     }
 
-    public void setFirstCategory(int firstCategory) {
+    public void setFirstCategory(Category firstCategory) {
         this.firstCategory = firstCategory;
     }
 
-    public int getSecondCategory() {
+    public Category getSecondCategory() {
         return secondCategory;
     }
 
-    public void setSecondCategory(int secondCategory) {
+    public void setSecondCategory(Category secondCategory) {
         this.secondCategory = secondCategory;
     }
 }

@@ -9,6 +9,9 @@ import android.util.Log;
 import android.view.View;
 
 import com.artjoker.core.activities.AbstractLauncher;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -18,7 +21,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.money.fragments.AddCategoryFragment;
 import com.money.fragments.OperationFragment;
 import com.money.fragments.MainFragment;
+import com.money.fragments.RecommendationFragment;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -27,12 +32,20 @@ import java.util.Date;
  */
 public class Launcher extends AbstractLauncher {
 
-    private PowerManager.WakeLock wakeLock;
     Drawer drawer;
+    FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void initDependencies() {
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        Fabric.with(this, new Crashlytics());
+//        FirebaseCrash.report(new Exception("Idi nahuy"));
+//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     @Override
@@ -78,6 +91,8 @@ public class Launcher extends AbstractLauncher {
         SecondaryDrawerItem itemMain = new SecondaryDrawerItem().withName(R.string.item_drawer_main).withIdentifier(Constants.ITEM_DRAWER_MAIN);
         SecondaryDrawerItem itemCosts = new SecondaryDrawerItem().withName(R.string.item_drawer_operations).withIdentifier(Constants.ITEM_DRAWER_OPERATIONS);
         SecondaryDrawerItem itemCategories = new SecondaryDrawerItem().withName(R.string.item_drawer_categories).withIdentifier(Constants.ITEM_DRAWER_CATEGORIES);
+        SecondaryDrawerItem itemRecommendations = new SecondaryDrawerItem().withName(R.string.item_drawer_recommendations).withIdentifier(Constants.ITEM_RECOMMENDATIONS);
+
 
 //create the drawer and remember the `Drawer` result object
         drawer = new DrawerBuilder()
@@ -87,7 +102,8 @@ public class Launcher extends AbstractLauncher {
                 .addDrawerItems(
                         itemMain,
                         itemCosts,
-                        itemCategories
+                        itemCategories,
+                        itemRecommendations
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -103,6 +119,10 @@ public class Launcher extends AbstractLauncher {
                                 break;
                             case Constants.ITEM_DRAWER_MAIN:
                                 onCommit(new MainFragment(), null);
+                                drawer.closeDrawer();
+                                break;
+                            case Constants.ITEM_RECOMMENDATIONS:
+                                onCommit(new RecommendationFragment(), null);
                                 drawer.closeDrawer();
                                 break;
                         }

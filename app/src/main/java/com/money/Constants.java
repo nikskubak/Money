@@ -7,6 +7,7 @@ public class Constants {
     public static final int ITEM_DRAWER_OPERATIONS = 0;
     public static final int ITEM_DRAWER_CATEGORIES = 2;
     public static final int ITEM_DRAWER_MAIN = 3;
+    public static final int ITEM_RECOMMENDATIONS = 4;
     public static final int CATEGORY_NOT_ENTERED = -1;
 
     public static final int TYPE_TRANSACTION_GAIN = 1;
@@ -29,5 +30,6 @@ public class Constants {
     public interface LoadersID {
         int LOADER_CATEGORIES = 0;
         int LOADER_TRANSACTIONS = 1;
+        int LOADER_RECOMMENDATIONS = 2;
     }
 }

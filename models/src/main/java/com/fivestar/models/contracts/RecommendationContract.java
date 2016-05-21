@@ -17,9 +17,12 @@ public interface RecommendationContract extends RecommendationColumns, DatabaseT
 
     String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
             + ID + " " + INTEGER + " PRIMARY KEY AUTOINCREMENT , "
-            + TYPE + " " + TEXT + ", "
             + DESCRIPTION + " " + TEXT + ", "
             + DATE + " " + TEXT + ", "
+            + NAME_CATEGORY_FIRST + " " + TEXT + ", "
+            + NAME_CATEGORY_SECOND + " " + TEXT + ", "
+            + DATA_CATEGORY_FIRST + " " + TEXT + ", "
+            + DATA_CATEGORY_SECOND + " " + TEXT + ", "
             + VIEWED + " " + INTEGER
             + " );";
 

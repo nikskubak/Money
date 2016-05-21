@@ -1,32 +1,27 @@
 package com.money.recomandation;
 
-import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.fivestar.models.Category;
+import com.fivestar.models.DayCount;
 import com.fivestar.models.Transaction;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.RecommendationContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
 import com.fivestar.models.converters.TransactionCursorConverter;
-import com.google.common.primitives.Doubles;
+import com.google.gson.Gson;
 import com.money.Constants;
 import com.money.DatabaseUtils;
 import com.money.models.CategoriesPair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by skuba on 11.04.2016.
@@ -37,7 +32,6 @@ public class CorrelationRecomandationGenerator {
     long startDate, endDate;
     ArrayList<Double> firstCategoryDaySumValues;
     ArrayList<Double> secondCategoryDaySumValues;
-    ArrayList<Category> categories;
     int countOfDay;
     int indexOfCurrentDay;
 
@@ -50,29 +44,27 @@ public class CorrelationRecomandationGenerator {
 
         firstCategoryDaySumValues = new ArrayList<>(countOfDay);
         secondCategoryDaySumValues = new ArrayList<>(countOfDay);
-        categories = new ArrayList<>();
     }
 
-    ArrayList<Integer> getCategoryIds() {
-        ArrayList<Integer> categoryIds = new ArrayList<>();
+    ArrayList<Category> getCategories() {
+        ArrayList<Category> categories = new ArrayList<>();
         Cursor categoryCursor = context.getContentResolver().query(CategoryContract.CONTENT_URI, null, null, null, null);
         if (categoryCursor != null) {
             CategoryCursorConverter converter = new CategoryCursorConverter();
             for (categoryCursor.moveToFirst(); !categoryCursor.isAfterLast(); categoryCursor.moveToNext()) {
                 converter.setCursor(categoryCursor);
                 categories.add(converter.getObject());
-                categoryIds.add(converter.getObject().getId());
             }
         }
-        return categoryIds;
+        return categories;
     }
 
     ArrayList<CategoriesPair> getCategoriesPairs() {
-        ArrayList<Integer> categoryIds = getCategoryIds();
+        ArrayList<Category> categories = getCategories();
         ArrayList<CategoriesPair> categoriesPairs = new ArrayList<>();
-        for (int i = 0; i < categoryIds.size(); i++) {
-            for (int j = i + 1; j < categoryIds.size(); j++) {
-                categoriesPairs.add(new CategoriesPair(categoryIds.get(i), categoryIds.get(j)));
+        for (int i = 0; i < categories.size(); i++) {
+            for (int j = i + 1; j < categories.size(); j++) {
+                categoriesPairs.add(new CategoriesPair(categories.get(i), categories.get(j)));
             }
         }
         return categoriesPairs;
@@ -87,8 +79,8 @@ public class CorrelationRecomandationGenerator {
         ArrayList<Transaction> transactionsFirstCategory = new ArrayList<>();
         ArrayList<Transaction> transactionsSecondCategory = new ArrayList<>();
         for (CategoriesPair iterator : categoriesPairs) {
-            queryFirstCategoryBundle = DatabaseUtils.getTransactionsFromDB(null, String.valueOf(startDate), String.valueOf(endDate), iterator.getFirstCategory());
-            querySecondCategoryBundle = DatabaseUtils.getTransactionsFromDB(null, String.valueOf(startDate), String.valueOf(endDate), iterator.getSecondCategory());
+            queryFirstCategoryBundle = DatabaseUtils.getTransactionsFromDB(null, String.valueOf(startDate), String.valueOf(endDate), iterator.getFirstCategory().getId());
+            querySecondCategoryBundle = DatabaseUtils.getTransactionsFromDB(null, String.valueOf(startDate), String.valueOf(endDate), iterator.getSecondCategory().getId());
             firstCategoryTransactionsCursor = context.getContentResolver().query(
                     TransactionContract.CONTENT_URI,
                     null,
@@ -104,7 +96,7 @@ public class CorrelationRecomandationGenerator {
                     querySecondCategoryBundle.getStringArray(Constants.TRANSACTION_SELECTION_ARGS),
                     null
             );
-            if (iterator.getFirstCategory() == 1 && iterator.getSecondCategory() == 2) {
+            if (iterator.getFirstCategory().getId() == 1 && iterator.getSecondCategory().getId() == 2) {
                 DatabaseUtils.logCursor(firstCategoryTransactionsCursor);
                 firstCategoryDaySumValues = convertCursor(firstCategoryTransactionsCursor);
                 secondCategoryDaySumValues = convertCursor(secondCategoryTransactionsCursor);
@@ -118,11 +110,15 @@ public class CorrelationRecomandationGenerator {
                     Log.e("matchingPicks", " " + matchingPicks(MathHelper.findPickValues(firstCategoryDaySumValues), MathHelper.findPickValues(secondCategoryDaySumValues)));
                     //нужно создать табоицу рекомендаций и заносить туда данные
                     ContentValues values = new ContentValues();
-                    values.put(RecommendationContract.DESCRIPTION, "Существует зависимость между категорией " + iterator.getFirstCategory() +
-                    " и категорией" + iterator.getSecondCategory());
-                    values.put(RecommendationContract.TYPE, "Matching picks");
+                    values.put(RecommendationContract.DESCRIPTION, "Существует зависимость между категорией " + iterator.getFirstCategory().getName() +
+                            " и категорией" + iterator.getSecondCategory().getName());
                     values.put(RecommendationContract.DATE, System.currentTimeMillis());
                     values.put(RecommendationContract.VIEWED, 1);
+
+                    values.put(RecommendationContract.NAME_CATEGORY_FIRST, iterator.getFirstCategory().getName());
+                    values.put(RecommendationContract.NAME_CATEGORY_SECOND, iterator.getSecondCategory().getName());
+                    values.put(RecommendationContract.DATA_CATEGORY_FIRST, initCategoryData(firstCategoryDaySumValues));
+                    values.put(RecommendationContract.DATA_CATEGORY_SECOND, initCategoryData(secondCategoryDaySumValues));
                     context.getContentResolver().insert(RecommendationContract.CONTENT_URI, values);
                 }
 
@@ -186,6 +182,15 @@ public class CorrelationRecomandationGenerator {
             }
         }
         return false;
+    }
+
+    private String initCategoryData(ArrayList<Double> values) {
+        ArrayList<DayCount> result = new ArrayList<>();
+        Gson gson = new Gson();
+        for (int i = 0; i < values.size(); i++) {
+            result.add(new DayCount(values.get(i), startDate + i * DateUtils.DAY_IN_MILLIS));
+        }
+        return gson.toJson(result);
     }
 
 }

@@ -2,6 +2,7 @@
     package="com.money">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -31,6 +32,10 @@
             android:enabled="true"
             android:exported="true"
             android:syncable="true" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a5f8bbe3dc4f4e3c2c473399a47826d84b7daa24" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -31,6 +31,10 @@ public class DatabaseUtils {
             Log.e(DatabaseUtils.class.getSimpleName(), "Cursor is null");
     }
 
+    public static boolean isValid(Cursor cursor) {
+        return cursor != null && cursor.getCount() > 0;
+    }
+
     public static Bundle getTransactionsFromDB(String type, String startDate, String endDate, Integer categoryId) {
         StringBuilder selection = new StringBuilder();
         Bundle bundle = new Bundle();

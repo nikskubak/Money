@@ -7,9 +7,10 @@ public interface RecommendationColumns {
 
     String ID = "id";
     String DESCRIPTION = "description";
-    String TYPE = "type";
+    String NAME_CATEGORY_FIRST = "name_category_first";
+    String NAME_CATEGORY_SECOND = "name_category_second";
     String DATE = "date";
+    String DATA_CATEGORY_FIRST = "data_category_first";
+    String DATA_CATEGORY_SECOND = "data_category_second";
     String VIEWED = "viewed";
-
-    String[] COLUMNS = new String[]{ID, DESCRIPTION, TYPE, DATE, VIEWED};
 }

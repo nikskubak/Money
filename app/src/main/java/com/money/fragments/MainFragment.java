@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.artjoker.core.fragments.AbstractBasic;
 import com.fivestar.models.columns.CategoryColumns;
+import com.google.firebase.crash.FirebaseCrash;
 import com.money.Constants;
 import com.money.R;
 
@@ -30,6 +31,7 @@ public class MainFragment extends AbstractBasic implements View.OnClickListener 
     protected void initListeners(View view) {
         super.initListeners(view);
         buttonAddTransaction.setOnClickListener(this);
+        FirebaseCrash.log("SQL database failed to initialize");
     }
 
     @Override
