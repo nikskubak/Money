@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'
+
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -22,12 +22,30 @@ android {
 
     defaultConfig {
         applicationId "com.money"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
 //        resConfigs "ldpi", "mdpi"
+//        generatedDensities = []
+
+        // Gradle Plugin 2.0
+        // disable limited support for vector drawables fro Android Studio 1.4
+        // vectorDrawables.useSupportLibrary = truesplits {
     }
+
+
+
+    // Gradle Plugin 1.5
+    // disable limited support for vector drawables fro Android Studio 1.4
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,17 +57,15 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-
-
     compile 'com.google.firebase:firebase-core:9.0.0'
     compile 'com.google.firebase:firebase-crash:9.0.0'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-
-
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:support-vector-drawable:23.2.0'
+    compile 'com.android.support:animated-vector-drawable:23.2.0'
+    compile 'com.android.support:appcompat-v7:23.2.0'
     compile project(':core')
     compile project(':database')
     compile project(':models')
-    compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:cardview-v7:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.borax12.materialdaterangepicker:library:1.6'
@@ -60,3 +76,5 @@ dependencies {
         transitive = true;
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

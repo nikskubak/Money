@@ -5,3 +5,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':core')
 }
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+}

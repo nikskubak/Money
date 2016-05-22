@@ -4,9 +4,11 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.artjoker.core.activities.AbstractLauncher;
 import com.crashlytics.android.Crashlytics;
@@ -24,15 +26,18 @@ import com.money.fragments.MainFragment;
 import com.money.fragments.RecommendationFragment;
 
 import io.fabric.sdk.android.Fabric;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by skuba on 28.02.2016.
  */
-public class Launcher extends AbstractLauncher {
+public class Launcher extends AbstractLauncher implements View.OnClickListener {
 
     Drawer drawer;
+    Toolbar toolbar;
+    ImageView filterButton;
     FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -46,6 +51,28 @@ public class Launcher extends AbstractLauncher {
 //        Fabric.with(this, new Crashlytics());
 //        FirebaseCrash.report(new Exception("Idi nahuy"));
 //        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        filterButton = (ImageView) findViewById(R.id.filter_button);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        filterButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.filter_button:
+                onCommit(new OperationFragment(), null);
+                break;
+        }
     }
 
     @Override
@@ -175,7 +202,7 @@ public class Launcher extends AbstractLauncher {
 
     void startRecomandationService() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2016,4,8,0,0,0);
+        calendar.set(2016, 4, 8, 0, 0, 0);
         Date startDate = new Date(calendar.getTime().getTime());
         Date finisDate = new Date(startDate.getTime() + 30 * DateUtils.DAY_IN_MILLIS);
         Log.e("service_date", startDate.toString());
@@ -186,4 +213,6 @@ public class Launcher extends AbstractLauncher {
         serviceIntent.putExtra(Constants.FINISH_DATE_TAG, finisDate.getTime());
         startService(serviceIntent);
     }
+
+
 }

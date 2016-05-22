@@ -3,12 +3,13 @@ package com.artjoker.core.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.artjoker.core.socialnetworks.ISocialNetwork;
 import com.artjoker.core.socialnetworks.SocialManager;
 
 
-public abstract class SocialActivity extends Activity {
+public abstract class SocialActivity extends AppCompatActivity {
     protected SocialManager socialManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

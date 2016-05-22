@@ -1,13 +1,10 @@
 package com.money.fragments;
 
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.artjoker.core.fragments.AbstractBasic;
-import com.fivestar.models.columns.CategoryColumns;
 import com.google.firebase.crash.FirebaseCrash;
-import com.money.Constants;
 import com.money.R;
 
 /**
@@ -15,7 +12,7 @@ import com.money.R;
  */
 public class MainFragment extends AbstractBasic implements View.OnClickListener {
 
-    ImageButton buttonAddTransaction;
+    FloatingActionButton buttonAddTransaction;
 
     @Override
     protected int getLayoutId() {
@@ -24,14 +21,14 @@ public class MainFragment extends AbstractBasic implements View.OnClickListener 
 
     @Override
     protected void initViews(View view) {
-        buttonAddTransaction = (ImageButton) view.findViewById(R.id.main_fragment_add_transaction_button);
+        buttonAddTransaction = (FloatingActionButton) view.findViewById(R.id.main_fragment_add_transaction_button);
     }
 
     @Override
     protected void initListeners(View view) {
         super.initListeners(view);
         buttonAddTransaction.setOnClickListener(this);
-        FirebaseCrash.log("SQL database failed to initialize");
+
     }
 
     @Override
@@ -50,7 +47,6 @@ public class MainFragment extends AbstractBasic implements View.OnClickListener 
             case R.id.main_fragment_add_transaction_button:
                 commit(new AddTransactionFragment(), null);
                 break;
-
         }
     }
 }
