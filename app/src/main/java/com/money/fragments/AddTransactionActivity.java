@@ -1,7 +1,9 @@
 package com.money.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.database.Cursor;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.artjoker.core.activities.AbstractLauncher;
 import com.artjoker.core.fragments.AbstractBasic;
 import com.fivestar.models.Category;
 import com.fivestar.models.columns.TransactionColumns;
@@ -39,7 +42,7 @@ import java.util.Calendar;
 /**
  * Created by skuba on 19.03.2016.
  */
-public class AddTransactionFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks, CategoryRecyclerAdapter.OnItemCLickListener,
+public class AddTransactionActivity extends Activity implements LoaderManager.LoaderCallbacks, CategoryRecyclerAdapter.OnItemCLickListener,
         View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     Button buttonCategory;
@@ -52,41 +55,45 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     AlertDialog alertDailog;
     CustomKeyboardView keyboardView;
     ImageView buttonCalendar;
+    ImageView buttonBack;
     String enteredDate;
 
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.add_transaction_fragment;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.add_transaction_fragment);
+        initViews();
+        initListeners();
     }
 
-    @Override
-    protected void initViews(View view) {
-        buttonCalendar = (ImageView) view.findViewById(R.id.add_transaction_button_date);
-        buttonCategory = (Button) view.findViewById(R.id.add_transaction_buuton_category);
-        editTextSum = (EditText) view.findViewById(R.id.add_transaction_edit_text_sum);
-        editTextDescription = (EditText) view.findViewById(R.id.add_transaction_edit_text_description);
-        recyclerViewCategory = (RecyclerView) view.findViewById(R.id.add_transaction_recycler_categoty);
-        keyboardView = (CustomKeyboardView) view.findViewById(R.id.keyboardview);
+    protected void initViews() {
+        buttonCalendar = (ImageView)findViewById(R.id.add_transaction_button_date);
+        buttonBack = (ImageView)findViewById(R.id.back_button);
+        buttonCategory = (Button)findViewById(R.id.add_transaction_buuton_category);
+        editTextSum = (EditText)findViewById(R.id.add_transaction_edit_text_sum);
+        editTextDescription = (EditText) findViewById(R.id.add_transaction_edit_text_description);
+        recyclerViewCategory = (RecyclerView) findViewById(R.id.add_transaction_recycler_categoty);
+        keyboardView = (CustomKeyboardView) findViewById(R.id.keyboardview);
         keyboardView.setKeyboard(R.xml.number_keyboard);
         keyboardView.setListeners();
         keyboardView.showCustomKeyboard(editTextSum);
         editTextSum.requestFocus();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
     }
 
-    @Override
-    protected void initListeners(View view) {
-        super.initListeners(view);
+
+    protected void initListeners() {
         buttonCategory.setOnClickListener(this);
+        buttonBack.setOnClickListener(this);
         buttonCalendar.setOnClickListener(this);
         editTextSum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     keyboardView.showCustomKeyboard(v);
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 }
             }
         });
@@ -126,21 +133,13 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 //        });
     }
 
-    @Override
-    protected void initContent() {
-        super.initContent();
-        ((Launcher) getActivity()).getDrawer().deselect();
-    }
 
-    @Override
-    protected int getHeaderIconsPolicy() {
-        return 0;
-    }
+
 
     void startRecyclerView() {
         adapter = new CategoryRecyclerAdapter(categories);
         adapter.setListener(this);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(this);
         recyclerViewCategory.setLayoutManager(layoutManager);
         recyclerViewCategory.setAdapter(adapter);
         recyclerViewCategory.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -165,7 +164,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case Constants.LoadersID.LOADER_CATEGORIES:
-                return new CursorLoader(getActivity(), CategoryContract.CONTENT_URI, null, null, null, null);
+                return new CursorLoader(this, CategoryContract.CONTENT_URI, null, null, null, null);
             default:
                 return null;
         }
@@ -193,13 +192,13 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
     }
 
     void showDialogWithCategory() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
         View dialogView = (View) inflater.inflate(R.layout.dialog_recycler_view, null);
         RecyclerView dialogRecycler = (RecyclerView) dialogView.findViewById(R.id.dialog_recycler_view_categoty);
         adapter = new CategoryRecyclerAdapter(categories);
         adapter.setListener(this);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(this);
         dialogRecycler.setAdapter(adapter);
         dialogRecycler.setLayoutManager(layoutManager);
         builder.setView(dialogView);
@@ -214,7 +213,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 //        Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
         alertDailog.dismiss();
         insertTransaction(categories.get(position));
-        commit(new OperationFragment(), null);
+//        onCommit(new OperationFragment(), null);
     }
 
     @Override
@@ -229,7 +228,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         values.put(TransactionColumns.DATE, enteredDate == null ? String.valueOf(System.currentTimeMillis()) : enteredDate);
         values.put(TransactionColumns.TYPE, category.getType());
         values.put(TransactionColumns.DESCRIPTION, editTextDescription.getText().toString());
-        getActivity().getContentResolver().insert(TransactionContract.CONTENT_URI, values);
+        getContentResolver().insert(TransactionContract.CONTENT_URI, values);
     }
 
     @Override
@@ -237,13 +236,16 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         switch (v.getId()) {
             case R.id.add_transaction_buuton_category:
                 if (!android.text.TextUtils.isEmpty(editTextSum.getText().toString())) {
-                    getActivity().getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
+                    getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
                 } else {
-                    Toast.makeText(getActivity(), "Введите сумму", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Введите сумму", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.add_transaction_button_date:
                 showDateDialog();
+                break;
+            case R.id.back_button:
+                onBackPressed();
                 break;
 
 //            case R.id.add_transaction_edit_text_description:
@@ -260,7 +262,7 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
 
     void showDateDialog() {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
     }
 
@@ -271,4 +273,5 @@ public class AddTransactionFragment extends AbstractBasic implements LoaderManag
         enteredDate = String.valueOf(calendar.getTimeInMillis());
         buttonCalendar.setImageResource(R.drawable.ic_calendar_multiple_check_black_enabled);
     }
+
 }

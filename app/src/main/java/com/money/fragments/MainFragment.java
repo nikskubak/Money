@@ -1,10 +1,12 @@
 package com.money.fragments;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 
 import com.artjoker.core.fragments.AbstractBasic;
 import com.google.firebase.crash.FirebaseCrash;
+import com.money.Launcher;
 import com.money.R;
 
 /**
@@ -34,6 +36,7 @@ public class MainFragment extends AbstractBasic implements View.OnClickListener 
     @Override
     protected void initContent() {
         super.initContent();
+
     }
 
     @Override
@@ -45,7 +48,7 @@ public class MainFragment extends AbstractBasic implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_fragment_add_transaction_button:
-                commit(new AddTransactionFragment(), null);
+//                matchCommit(new AddTransactionActivity(),"sdsff", null);
                 break;
         }
     }

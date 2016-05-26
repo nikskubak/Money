@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".fragments.AddTransactionActivity"
+            android:screenOrientation="portrait"/>
+
         <service
             android:name=".RecomandationIntentSerice"
             android:enabled="true"

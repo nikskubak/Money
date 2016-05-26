@@ -3,17 +3,13 @@ package com.money;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.artjoker.core.activities.AbstractLauncher;
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -21,11 +17,10 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.money.fragments.AddCategoryFragment;
+import com.money.fragments.AddTransactionActivity;
 import com.money.fragments.OperationFragment;
 import com.money.fragments.MainFragment;
 import com.money.fragments.RecommendationFragment;
-
-import io.fabric.sdk.android.Fabric;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +31,7 @@ import java.util.Date;
 public class Launcher extends AbstractLauncher implements View.OnClickListener {
 
     Drawer drawer;
-    Toolbar toolbar;
+//    Toolbar toolbar;
     ImageView filterButton;
     FirebaseAnalytics mFirebaseAnalytics;
 
@@ -56,7 +51,7 @@ public class Launcher extends AbstractLauncher implements View.OnClickListener {
     @Override
     protected void initViews() {
         super.initViews();
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+//        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         filterButton = (ImageView) findViewById(R.id.filter_button);
     }
 
@@ -70,7 +65,9 @@ public class Launcher extends AbstractLauncher implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filter_button:
-                onCommit(new OperationFragment(), null);
+//                onCommit(new OperationFragment(), null);
+                finish();
+                startActivity(new Intent(this, AddTransactionActivity.class));
                 break;
         }
     }
@@ -138,7 +135,7 @@ public class Launcher extends AbstractLauncher implements View.OnClickListener {
                         switch ((int) drawerItem.getIdentifier()) {
                             case Constants.ITEM_DRAWER_OPERATIONS:
                                 drawer.closeDrawer();
-                                onCommit(new OperationFragment(), null);
+                                onSetPrimary(new OperationFragment(), "dfg");
                                 break;
                             case Constants.ITEM_DRAWER_CATEGORIES:
                                 onCommit(new AddCategoryFragment(), null);
