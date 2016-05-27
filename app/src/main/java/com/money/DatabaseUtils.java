@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fivestar.models.Transaction;
 import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.models.columns.TransactionColumns;
+import com.fivestar.models.converters.TransactionCursorConverter;
 import com.fivestar.utils.SQLiteHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by android on 11.01.2016.
@@ -84,5 +89,35 @@ public class DatabaseUtils {
         bundle.putStringArray(Constants.TRANSACTION_SELECTION_ARGS, selectionArgs.toArray(new String[selectionArgs.size()]));
 //        Log.e("getTransactionsFromDB", "selection = " + selection.toString() + " selectionArgs = " + selectionArgs.toString());
         return bundle;
+    }
+
+    public static HashMap<String, Double> getSumTransactionsByCategories(Cursor transactionCursor) {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        if (isValid(transactionCursor)) {
+            TransactionCursorConverter converter = new TransactionCursorConverter();
+            for (transactionCursor.moveToFirst(); !transactionCursor.isAfterLast(); transactionCursor.moveToNext()) {
+                converter.setCursor(transactionCursor);
+                transactions.add(converter.getObject());
+            }
+        }
+        return sortTransactionsByCategories(transactions);
+    }
+
+    public static HashMap<String, Double> sortTransactionsByCategories(ArrayList<Transaction> transactions) {
+        HashMap<String, Double> categoriesSums = new HashMap<>();
+        Set<String> categories = new HashSet<>();
+        for (Transaction iterator: transactions ) {
+            if(categories.add(iterator.getCategoryName())){
+                categoriesSums.put(iterator.getCategoryName(), 0.0);
+            }
+        }
+        for (Transaction iterator: transactions ) {
+            for (String categoryName: categories ) {
+                if(categoryName.contentEquals(iterator.getCategoryName())){
+                    categoriesSums.put(categoryName, categoriesSums.get(categoryName) + iterator.getMoney());
+                }
+            }
+        }
+        return categoriesSums;
     }
 }

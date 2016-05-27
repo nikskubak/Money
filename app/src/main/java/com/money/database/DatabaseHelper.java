@@ -40,21 +40,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_gains),
                 context.getResources().getString(R.string.category_type_gain));
-        initDefaultTransactions(db,
-                1,
-                context.getResources().getString(R.string.category_type_cost));
-        initDefaultTransactions(db,
-                2,
-                context.getResources().getString(R.string.category_type_cost));
+//        initDefaultTransactions(db,
+//                1,
+//                context.getResources().getString(R.string.category_type_cost));
+//        initDefaultTransactions(db,
+//                2,
+//                context.getResources().getString(R.string.category_type_cost));
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.e("onCreate", "onUpgrade");
-        db.execSQL(CategoryContract.DROP_TABLE);
-        db.execSQL(TransactionContract.DROP_TABLE);
-        db.execSQL(RecommendationContract.DROP_TABLE);
-        onCreate(db);
+        if(oldVersion < newVersion) {
+            db.execSQL(CategoryContract.DROP_TABLE);
+            db.execSQL(TransactionContract.DROP_TABLE);
+            db.execSQL(RecommendationContract.DROP_TABLE);
+            onCreate(db);
+        }
     }
 
     void initDefaultCategories(SQLiteDatabase db, String names[], String type) {

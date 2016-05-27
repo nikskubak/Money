@@ -1,15 +1,15 @@
-package com.money.fragments;
+package com.money.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Fragment;
+import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -23,8 +23,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.artjoker.core.activities.AbstractLauncher;
-import com.artjoker.core.fragments.AbstractBasic;
 import com.fivestar.models.Category;
 import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
@@ -32,7 +30,6 @@ import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
-import com.money.Launcher;
 import com.money.R;
 import com.money.views.CustomKeyboardView;
 
@@ -68,10 +65,10 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
     }
 
     protected void initViews() {
-        buttonCalendar = (ImageView)findViewById(R.id.add_transaction_button_date);
-        buttonBack = (ImageView)findViewById(R.id.back_button);
-        buttonCategory = (Button)findViewById(R.id.add_transaction_buuton_category);
-        editTextSum = (EditText)findViewById(R.id.add_transaction_edit_text_sum);
+        buttonCalendar = (ImageView) findViewById(R.id.add_transaction_button_date);
+        buttonBack = (ImageView) findViewById(R.id.back_button);
+        buttonCategory = (Button) findViewById(R.id.add_transaction_buuton_category);
+        editTextSum = (EditText) findViewById(R.id.add_transaction_edit_text_sum);
         editTextDescription = (EditText) findViewById(R.id.add_transaction_edit_text_description);
         recyclerViewCategory = (RecyclerView) findViewById(R.id.add_transaction_recycler_categoty);
         keyboardView = (CustomKeyboardView) findViewById(R.id.keyboardview);
@@ -132,8 +129,6 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
 //            }
 //        });
     }
-
-
 
 
     void startRecyclerView() {
@@ -213,7 +208,8 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
 //        Toast.makeText(getActivity(), categories.get(position).getName(), Toast.LENGTH_SHORT).show();
         alertDailog.dismiss();
         insertTransaction(categories.get(position));
-//        onCommit(new OperationFragment(), null);
+        startActivity(new Intent(this, OperationActivity.class));
+        finish();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.money.fragments;
+package com.money.activities;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.artjoker.core.fragments.AbstractBasic;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.fivestar.models.Category;
 import com.fivestar.models.contracts.CategoryContract;
@@ -26,6 +25,7 @@ import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.DatabaseUtils;
 import com.money.R;
+import com.money.activities.BaseActivity;
 import com.money.adapters.CostsRecyclerAdapter;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.Calendar;
 /**
  * Created by skuba on 24.03.2016.
  */
-public class OperationFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks,
+public class OperationActivity extends BaseActivity implements LoaderManager.LoaderCallbacks,
         CompoundButton.OnCheckedChangeListener, CategoryRecyclerAdapter.OnItemCLickListener,
         View.OnClickListener, DatePickerDialog.OnDateSetListener {
     RecyclerView recyclerView;
@@ -51,26 +51,20 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
     ImageView imageButtonDateFilter;
     int currentCategoryId;
 
-
     @Override
-    protected int getLayoutId() {
-        return R.layout.operations_fragment;
+    protected void initViews() {
+        radioCost = (RadioButton) findViewById(R.id.add_category_radio_button_cost);
+        radioGain = (RadioButton) findViewById(R.id.add_category_radio_button_gain);
+        radioALL = (RadioButton) findViewById(R.id.add_category_radio_button_all);
+        recyclerView = (RecyclerView) findViewById(R.id.cost_fragment_recycler_view);
+        imageButtonCategoryFilter = (ImageView) findViewById(R.id.operation_button_category_filter);
+        imageButtonDateFilter = (ImageView) findViewById(R.id.operation_button_date_filter);
+        radioGroup = (RadioGroup) findViewById(R.id.operation_radio_group);
     }
 
     @Override
-    protected void initViews(View view) {
-        radioCost = (RadioButton) view.findViewById(R.id.add_category_radio_button_cost);
-        radioGain = (RadioButton) view.findViewById(R.id.add_category_radio_button_gain);
-        radioALL = (RadioButton) view.findViewById(R.id.add_category_radio_button_all);
-        recyclerView = (RecyclerView) view.findViewById(R.id.cost_fragment_recycler_view);
-        imageButtonCategoryFilter = (ImageView) view.findViewById(R.id.operation_button_category_filter);
-        imageButtonDateFilter = (ImageView) view.findViewById(R.id.operation_button_date_filter);
-        radioGroup = (RadioGroup) view.findViewById(R.id.operation_radio_group);
-    }
-
-    @Override
-    protected void initListeners(View view) {
-        super.initListeners(view);
+    protected void initListeners() {
+        super.initListeners();
         radioALL.setOnCheckedChangeListener(this);
         radioGain.setOnCheckedChangeListener(this);
         radioCost.setOnCheckedChangeListener(this);
@@ -100,24 +94,25 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
 
     }
 
+    @Override
+    protected int getContentViewLayoutResId() {
+        return R.layout.operations_fragment;
+    }
+
     void startRecycler(Cursor cursor) {
-        layoutManager = new LinearLayoutManager(getActivity());
-        adapter = new CostsRecyclerAdapter(cursor, getActivity());
+        layoutManager = new LinearLayoutManager(this);
+        adapter = new CostsRecyclerAdapter(cursor, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    @Override
-    protected int getHeaderIconsPolicy() {
-        return 0;
-    }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case Constants.LoadersID.LOADER_TRANSACTIONS:
                 return new CursorLoader(
-                        getActivity(),
+                        this,
                         TransactionContract.CONTENT_URI,
                         null,
                         args.getString(Constants.TRANSACTION_SELECTION),
@@ -125,7 +120,7 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
                         null
                 );
             case Constants.LoadersID.LOADER_CATEGORIES:
-                return new CursorLoader(getActivity(), CategoryContract.CONTENT_URI, null, null, null, null);
+                return new CursorLoader(this, CategoryContract.CONTENT_URI, null, null, null, null);
             default:
                 return null;
         }
@@ -156,13 +151,13 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
     }
 
     void showDialogWithCategory() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
         View dialogView = (View) inflater.inflate(R.layout.dialog_recycler_view, null);
         RecyclerView dialogRecycler = (RecyclerView) dialogView.findViewById(R.id.dialog_recycler_view_categoty);
         categoryRecyclerAdapter = new CategoryRecyclerAdapter(categories);
         categoryRecyclerAdapter.setListener(this);
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(this);
         dialogRecycler.setAdapter(categoryRecyclerAdapter);
         dialogRecycler.setLayoutManager(layoutManager);
         builder.setView(dialogView);
@@ -225,7 +220,7 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.operation_button_category_filter:
-                getActivity().getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
+                getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
                 break;
             case R.id.operation_button_date_filter:
                 showDatePickerDialog();
@@ -249,7 +244,7 @@ public class OperationFragment extends AbstractBasic implements LoaderManager.Lo
         Log.e("datePicker", "start = " + startDate.getTimeInMillis() + " end = " + endDate.getTimeInMillis());
     }
 
-    void showDatePickerDialog(){
+    void showDatePickerDialog() {
         DatePickerDialog datePickerDialog = new DatePickerDialog();
         datePickerDialog.setOnDateSetListener(this);
         datePickerDialog.show(getFragmentManager(), getResources().getString(R.string.operation_calendar_title));

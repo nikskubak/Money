@@ -8,13 +8,10 @@ import android.text.Editable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.money.Constants;
-import com.money.Launcher;
-import com.money.R;
 
 /**
  * Created by android on 06.01.2016.
@@ -75,7 +72,7 @@ public class CustomKeyboardView extends KeyboardView {
         @Override
         public void onKey(int primaryCode, int[] keyCodes) {
             // Get the EditText and its Editable
-//            View focusCurrent = ((Launcher) context).getWindow().getCurrentFocus();
+//            View focusCurrent = ((LauncherActivity) context).getWindow().getCurrentFocus();
 //            if (focusCurrent == null || focusCurrent.getClass() != EditText.class || focusCurrent.getId()!= R.id.add_transaction_edit_text_sum) return;
 //            EditText edittext = (EditText) focusCurrent;
             if(parentView.getFocusedChild() != null) {

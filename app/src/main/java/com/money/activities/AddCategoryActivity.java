@@ -1,4 +1,4 @@
-package com.money.fragments;
+package com.money.activities;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
+import com.money.activities.BaseActivity;
 import com.money.adapters.CursorRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 /**
  * Created by skuba on 22.03.2016.
  */
-public class AddCategoryFragment extends AbstractBasic implements LoaderManager.LoaderCallbacks, View.OnClickListener, CategoryRecyclerAdapter.OnItemCLickListener {
+public class AddCategoryActivity extends BaseActivity implements LoaderManager.LoaderCallbacks, View.OnClickListener, CategoryRecyclerAdapter.OnItemCLickListener {
 
     private RadioButton radioCost;
     private RadioButton radioGain;
@@ -44,44 +46,43 @@ public class AddCategoryFragment extends AbstractBasic implements LoaderManager.
     private RecyclerView categoryRecyclerView;
     private CategoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private ImageView buttonBack;
+
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.add_category_fragment;
+    protected void initViews() {
+        radioCost = (RadioButton)findViewById(R.id.add_category_radio_button_cost);
+        radioGain = (RadioButton) findViewById(R.id.add_category_radio_button_gain);
+        editTextCategoryName = (EditText)findViewById(R.id.add_category_edit_text_name);
+        buttonAddCategory = (Button)findViewById(R.id.add_category_button_add);
+        categoryRecyclerView = (RecyclerView)findViewById(R.id.add_category_recycler_view);
+        buttonBack = (ImageView)findViewById(R.id.back_button);
     }
 
     @Override
-    protected void initViews(View view) {
-        radioCost = (RadioButton) view.findViewById(R.id.add_category_radio_button_cost);
-        radioGain = (RadioButton) view.findViewById(R.id.add_category_radio_button_gain);
-        editTextCategoryName = (EditText) view.findViewById(R.id.add_category_edit_text_name);
-        buttonAddCategory = (Button) view.findViewById(R.id.add_category_button_add);
-        categoryRecyclerView = (RecyclerView) view.findViewById(R.id.add_category_recycler_view);
-    }
-
-    @Override
-    protected void initListeners(View view) {
-        super.initListeners(view);
+    protected void initListeners() {
+        super.initListeners();
         buttonAddCategory.setOnClickListener(this);
+        buttonBack.setOnClickListener(this);
     }
 
     @Override
     protected void initContent() {
         super.initContent();
         categories = new ArrayList<>();
-        getActivity().getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
+        getLoaderManager().initLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
     }
 
     @Override
-    protected int getHeaderIconsPolicy() {
-        return 0;
+    protected int getContentViewLayoutResId() {
+        return R.layout.add_category_fragment;
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case Constants.LoadersID.LOADER_CATEGORIES:
-                return new CursorLoader(getActivity(), CategoryContract.CONTENT_URI, null, null, null, null);
+                return new CursorLoader(this, CategoryContract.CONTENT_URI, null, null, null, null);
             default:
                 return null;
         }
@@ -113,6 +114,9 @@ public class AddCategoryFragment extends AbstractBasic implements LoaderManager.
             case R.id.add_category_button_add:
                 insertCategory();
                 break;
+            case R.id.back_button:
+                onBackPressed();
+                break;
         }
     }
 
@@ -132,17 +136,17 @@ public class AddCategoryFragment extends AbstractBasic implements LoaderManager.
             newCategory.setType(categoryType);
             String selection = CategoryColumns.NAME + "=? AND " + CategoryColumns.TYPE + "=?";
             String[] selectionArgs = new String[]{editTextCategoryName.getText().toString(),categoryType};
-            getActivity().getContentResolver().update(CategoryContract.CONTENT_URI, values, selection, selectionArgs);
-            getActivity().getLoaderManager().restartLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
+            getContentResolver().update(CategoryContract.CONTENT_URI, values, selection, selectionArgs);
+            getLoaderManager().restartLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
             editTextCategoryName.setText("");
 //            editTextCategoryName.setFocusable(false);
         } else {
-            Toast.makeText(getActivity(), getResources().getString(R.string.add_category_alert), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.add_category_alert), Toast.LENGTH_SHORT).show();
         }
     }
 
     void startRecycler() {
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new LinearLayoutManager(this);
         adapter = new CategoryRecyclerAdapter(categories);
         adapter.setListener(this);
         categoryRecyclerView.setAdapter(adapter);
@@ -161,14 +165,14 @@ public class AddCategoryFragment extends AbstractBasic implements LoaderManager.
 
     void showDialog(final Category category) {
         AlertDialog.Builder ad;
-        ad = new AlertDialog.Builder(getActivity());
+        ad = new AlertDialog.Builder(this);
         ad.setMessage("Удалить категорию?"); // сообщение
         ad.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String selection = CategoryColumns.NAME + "=? AND " + CategoryColumns.TYPE + "=?";
                 String[] selectionArgs = new String[]{category.getName(),category.getType()};
-                getActivity().getContentResolver().delete(CategoryContract.CONTENT_URI,selection,selectionArgs);
+                getContentResolver().delete(CategoryContract.CONTENT_URI,selection,selectionArgs);
             }
         });
         ad.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {

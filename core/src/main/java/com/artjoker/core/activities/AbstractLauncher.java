@@ -109,7 +109,7 @@ public abstract class AbstractLauncher extends SocialActivity implements OnInter
     }
 
     protected void initState() {
-        commitInitFragment(getInitFragment());
+//        commitInitFragment(getInitFragment());
     }
 
     protected final void commitInitFragment(Fragment fragment) {
