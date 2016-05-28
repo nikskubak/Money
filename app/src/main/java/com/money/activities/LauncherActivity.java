@@ -6,6 +6,8 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateUtils;
@@ -15,10 +17,19 @@ import android.widget.ImageView;
 
 import com.artjoker.core.activities.AbstractLauncher;
 import com.crashlytics.android.Crashlytics;
-import com.fivestar.models.contracts.CategoryContract;
+import com.db.chart.Tools;
+import com.db.chart.model.BarSet;
+import com.db.chart.view.BarChartView;
+import com.db.chart.view.ChartView;
+import com.db.chart.view.HorizontalBarChartView;
+import com.db.chart.view.animation.Animation;
+import com.db.chart.view.animation.easing.CubicEase;
 import com.fivestar.models.contracts.TransactionContract;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
-//import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -35,15 +46,17 @@ import com.money.DatabaseUtils;
 import com.money.R;
 import com.money.RecomandationIntentSerice;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import io.fabric.sdk.android.Fabric;
+
+//import com.github.mikephil.charting.data.Entry;
 
 /**
  * Created by skuba on 28.02.2016.
@@ -51,11 +64,13 @@ import io.fabric.sdk.android.Fabric;
 public class LauncherActivity extends AbstractLauncher implements View.OnClickListener, LoaderManager.LoaderCallbacks {
 
     Drawer drawer;
-//    Toolbar toolbar;
+    //    Toolbar toolbar;
     ImageView filterButton;
     FirebaseAnalytics mFirebaseAnalytics;
     FloatingActionButton buttonAddTransaction;
     PieChart pieChart;
+    HorizontalBarChart barChart;
+    HorizontalBarChartView williamBarChart;
 
     @Override
     protected void initDependencies() {
@@ -75,7 +90,9 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         super.initViews();
 //        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         buttonAddTransaction = (FloatingActionButton) findViewById(R.id.main_fragment_add_transaction_button);
-        pieChart = (PieChart) findViewById(R.id.chart);
+        pieChart = (PieChart) findViewById(R.id.pie_chart);
+        barChart = (HorizontalBarChart) findViewById(R.id.bar_chart);
+        williamBarChart = (HorizontalBarChartView) findViewById(R.id.william_barchart);
     }
 
     @Override
@@ -107,10 +124,10 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         initLoader();
     }
 
-    void initLoader(){
+    void initLoader() {
         getLoaderManager().restartLoader(
                 Constants.LoadersID.LOADER_TRANSACTIONS,
-                DatabaseUtils.getTransactionsFromDB(null, String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS*30), String.valueOf(System.currentTimeMillis()), null),
+                DatabaseUtils.getTransactionsFromDB(null, String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS * 30), String.valueOf(System.currentTimeMillis()), null),
                 this
         ).forceLoad();
     }
@@ -268,21 +285,10 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         switch (loader.getId()) {
             case Constants.LoadersID.LOADER_TRANSACTIONS:
                 HashMap<String, Double> categoriesSum = DatabaseUtils.getSumTransactionsByCategories((Cursor) data);
-                Log.e("getSumTransactions", DatabaseUtils.getSumTransactionsByCategories((Cursor)data).toString());
-                ArrayList<Entry> entries = new ArrayList<>();
-                ArrayList<String> labels = getCategoriesName(categoriesSum);
-                int index = 0;
-
-                for(Map.Entry<String, Double> entry : categoriesSum.entrySet()) {
-                    entries.add(new Entry(entry.getValue().floatValue(), index));
-                    index++;
-                }
-                PieDataSet dataset = new PieDataSet(entries, " category");
-                dataset.setColors(ColorTemplate.COLORFUL_COLORS);
-                PieData pieData = new PieData(labels, dataset); // initialize Piedata
-                pieData.setValueTextSize(15);
-                pieChart.setData(pieData);
-                pieChart.animateY(500);
+                Log.e("getSumTransactions", DatabaseUtils.getSumTransactionsByCategories((Cursor) data).toString());
+//                showPieChart(categoriesSum);
+                showBarChart(categoriesSum);
+                showWilliamBarChart(categoriesSum);
                 break;
         }
     }
@@ -292,14 +298,77 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
 
     }
 
-    private ArrayList<String> getCategoriesName(HashMap<String, Double> categoriesSum){
-        Set<String> keys = categoriesSum.keySet();
-        ArrayList<String> result = new ArrayList<>();
-            for(String key : keys){
-                result.add(key);
-            }
-            return result;
+    private void showPieChart(HashMap<String, Double> categoriesSum) {
+        ArrayList<Entry> entries = new ArrayList<>();
+        ArrayList<String> labels = getCategoriesName(categoriesSum);
+        int index = 0;
+        for (Map.Entry<String, Double> entry : categoriesSum.entrySet()) {
+            entries.add(new Entry(entry.getValue().floatValue(), index));
+            index++;
+        }
+        PieDataSet dataset = new PieDataSet(entries, " category");
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieData pieData = new PieData(labels, dataset); // initialize Piedata
+        pieData.setValueTextSize(15);
+        pieChart.setData(pieData);
+        pieChart.animateY(500);
     }
 
+    private void showBarChart(HashMap<String, Double> categoriesSum) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        ArrayList<String> labels = getCategoriesName(categoriesSum);
+        int index = 0;
+        for (Map.Entry<String, Double> entry : categoriesSum.entrySet()) {
+            entries.add(new BarEntry(entry.getValue().floatValue(), index));
+            index++;
+        }
+        BarDataSet dataset = new BarDataSet(entries, "");
+        dataset.setColors(ColorTemplate.LIBERTY_COLORS);
+        dataset.setValueTextSize(12);
+        BarData data = new BarData(labels, dataset);
+        barChart.setData(data);
+        barChart.animateY(500);
+        barChart.setDescription("");
+    }
+
+    private void showWilliamBarChart(HashMap<String, Double> categoriesSum) {
+
+        String[] labels = new String[categoriesSum.size()];
+        float[] values = new float[categoriesSum.size()];
+        int index = 0;
+        for (Map.Entry<String, Double> entry : categoriesSum.entrySet()) {
+            labels[index] = entry.getKey();
+            values[index] = entry.getValue().floatValue();
+            index++;
+        }
+
+        BarSet dataset = new BarSet(labels,values);
+        williamBarChart.setBarSpacing(20.0f);
+        williamBarChart.addData(dataset);
+
+// Generic chart customization
+// Paint object used to draw Grid
+        Paint gridPaint = new Paint();
+        gridPaint.setColor(Color.parseColor("#727272"));
+        gridPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        gridPaint.setAntiAlias(true);
+        gridPaint.setStrokeWidth(Tools.fromDpToPx(1.0f));
+        williamBarChart.setGrid(ChartView.GridType.HORIZONTAL, gridPaint);
+        williamBarChart.setLabelsFormat(new DecimalFormat("#"));
+
+// Animation customization
+        Animation anim = new Animation(500);
+        anim.setEasing(new CubicEase());
+        williamBarChart.show(anim);
+    }
+
+    private ArrayList<String> getCategoriesName(HashMap<String, Double> categoriesSum) {
+        Set<String> keys = categoriesSum.keySet();
+        ArrayList<String> result = new ArrayList<>();
+        for (String key : keys) {
+            result.add(key);
+        }
+        return result;
+    }
 
 }

@@ -61,7 +61,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.google.firebase:firebase-core:9.0.0'
     compile 'com.google.firebase:firebase-crash:9.0.0'
+
     compile 'com.github.PhilJay:MPAndroidChart:v2.0.9'
+    compile 'com.diogobernardino:williamchart:2.2'
+
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-vector-drawable:23.2.0'
     compile 'com.android.support:animated-vector-drawable:23.2.0'

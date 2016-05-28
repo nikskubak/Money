@@ -51,8 +51,21 @@
         app:srcCompat="@drawable/plus" />
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/chart"
+        android:id="@+id/pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/bar_chart"
+        android:layout_width="match_parent"
+        android:layout_marginTop="60dp"
+        android:layout_height="250dp"/>
+
+    <com.db.chart.view.HorizontalBarChartView
+        android:id="@+id/william_barchart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="310dp"/>
 
 </android.support.design.widget.CoordinatorLayout>
