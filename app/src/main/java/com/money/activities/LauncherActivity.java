@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateUtils;
@@ -19,7 +20,6 @@ import com.artjoker.core.activities.AbstractLauncher;
 import com.crashlytics.android.Crashlytics;
 import com.db.chart.Tools;
 import com.db.chart.model.BarSet;
-import com.db.chart.view.BarChartView;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.HorizontalBarChartView;
 import com.db.chart.view.animation.Animation;
@@ -114,6 +114,10 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     protected void initContent() {
         super.initContent();
         new DrawerBuilder().withActivity(this).build();
+//        Cursor cursor = getContentResolver().query(TransactionContract.CONTENT_URI, null, null, new String[]{String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS * 30), String.valueOf(System.currentTimeMillis())}, null);
+//        cursor.moveToFirst();
+//        Log.e("sum123456", " " + cursor.getDouble(0));
+
         initDrawer();
         startRecomandationService();
     }
@@ -286,9 +290,9 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
             case Constants.LoadersID.LOADER_TRANSACTIONS:
                 HashMap<String, Double> categoriesSum = DatabaseUtils.getSumTransactionsByCategories((Cursor) data);
                 Log.e("getSumTransactions", DatabaseUtils.getSumTransactionsByCategories((Cursor) data).toString());
-//                showPieChart(categoriesSum);
-                showBarChart(categoriesSum);
-                showWilliamBarChart(categoriesSum);
+                showPieChart(categoriesSum);
+//                showBarChart(categoriesSum);
+//                showWilliamBarChart(categoriesSum);
                 break;
         }
     }
@@ -342,7 +346,7 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
             index++;
         }
 
-        BarSet dataset = new BarSet(labels,values);
+        BarSet dataset = new BarSet(labels, values);
         williamBarChart.setBarSpacing(20.0f);
         williamBarChart.addData(dataset);
 

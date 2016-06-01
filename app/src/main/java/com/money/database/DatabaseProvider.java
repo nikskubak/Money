@@ -56,6 +56,9 @@ public class DatabaseProvider extends SecureDatabaseProvider {
             case Config.RECOMMENDATION_DIR_ID:
                 appendSelection(builder, RecommendationContract.TABLE_NAME, selection, selectionArgs);
                 return builder;
+            case Config.TRANSACTION_SUM_ID:
+                appendSelection(builder, RecommendationContract.TABLE_NAME, selection, selectionArgs);
+                return builder;
             default:
                 throw new IllegalArgumentException("unknown uri: " + uri);
         }
@@ -65,17 +68,21 @@ public class DatabaseProvider extends SecureDatabaseProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-
         final SQLiteDatabase database = getInstance();
-        final Cursor cursor;
-        if (getType(uri).equals(TransactionContract.CONTENT_TYPE)) {
-            SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-            queryBuilder.setTables(SQLiteHelper.selectJoinCategoryAndTransaction());
-            queryBuilder.setProjectionMap(buildColumnMap());
-            cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
-        } else {
-            cursor = getSimpleSelectionBuilder(uri, selection, selectionArgs).query(database, projection, sortOrder);
-        }
+        Cursor cursor;
+//        if(uri.equals(TransactionContract.CONTENT_URI)){
+//            cursor = database.rawQuery("SELECT SUM(" + TransactionContract.MONEY + ") FROM " + TransactionContract.TABLE_NAME +
+//                    " WHERE " + TransactionContract.DATE + ">? AND " + TransactionContract.DATE + "<?;", selectionArgs);
+//        }else {
+            if (getType(uri).equals(TransactionContract.CONTENT_TYPE)) {
+                SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+                queryBuilder.setTables(SQLiteHelper.selectJoinCategoryAndTransaction());
+                queryBuilder.setProjectionMap(buildColumnMap());
+                cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
+            } else {
+                cursor = getSimpleSelectionBuilder(uri, selection, selectionArgs).query(database, projection, sortOrder);
+            }
+//        }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -183,9 +190,9 @@ public class DatabaseProvider extends SecureDatabaseProvider {
         int CATEGORY_DIR_ID = 0x1001;
         int TRANSACTION_ITEM_ID = 0x2002;
         int TRANSACTION_DIR_ID = 0x2003;
+        int TRANSACTION_SUM_ID = 0x2004;
         int RECOMMENDATION_ITEM_ID = 0x3002;
         int RECOMMENDATION_DIR_ID = 0x3003;
-
     }
 
     private static HashMap<String, String> buildColumnMap() {

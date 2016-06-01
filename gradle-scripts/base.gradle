@@ -4,7 +4,7 @@ android {
     buildToolsVersion '20.0.0'
 
     defaultConfig {
-        minSdkVersion 17
+        minSdkVersion 16
         targetSdkVersion 23
 
         resConfigs "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
