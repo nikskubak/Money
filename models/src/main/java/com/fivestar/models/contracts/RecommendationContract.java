@@ -2,10 +2,8 @@ package com.fivestar.models.contracts;
 
 import android.net.Uri;
 
-import com.artjoker.core.database.constants.DatabaseTypes;
-import com.fivestar.models.columns.CategoryColumns;
+import com.fivestar.DatabaseTypes;
 import com.fivestar.models.columns.RecommendationColumns;
-import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.utils.ContentProviderHelper;
 
 /**

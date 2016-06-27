@@ -26,6 +26,10 @@ public class Constants {
 
     public static final int PICK_CONSTANT = 2;
 
+    public static final int PIE_CHART = 0;
+    public static final int BAR_CHART_MP = 1;
+    public static final int BAR_CHART_WILLIAM = 2;
+
 
     public interface LoadersID {
         int LOADER_CATEGORIES = 0;

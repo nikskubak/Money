@@ -14,14 +14,28 @@
         android:theme="@style/AppTheme"
         android:paddingRight="10dp">
 
-
-        <TextView
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/chart_type_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/chart_areaspline"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"/>
+</RelativeLayout>
+
     </android.support.v7.widget.Toolbar>
 
     <!--<TextView-->
@@ -60,14 +74,14 @@
         android:id="@+id/bar_chart"
         android:layout_width="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_height="250dp"
+        android:layout_height="match_parent"
         android:visibility="gone"/>
 
     <com.db.chart.view.HorizontalBarChartView
         android:id="@+id/william_barchart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="310dp"
+        android:layout_marginTop="60dp"
         android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

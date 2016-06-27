@@ -45,6 +45,7 @@ import com.money.Constants;
 import com.money.DatabaseUtils;
 import com.money.R;
 import com.money.RecomandationIntentSerice;
+import com.money.views.ChartTypeDialog;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by skuba on 28.02.2016.
  */
-public class LauncherActivity extends AbstractLauncher implements View.OnClickListener, LoaderManager.LoaderCallbacks {
+public class LauncherActivity extends AbstractLauncher implements View.OnClickListener, LoaderManager.LoaderCallbacks, ChartTypeDialog.ChangeTypeListener {
 
     Drawer drawer;
     //    Toolbar toolbar;
@@ -71,6 +72,9 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     PieChart pieChart;
     HorizontalBarChart barChart;
     HorizontalBarChartView williamBarChart;
+    ImageView chartTypeButton;
+    HashMap<String, Double> categoriesSum;
+    int chartType = Constants.PIE_CHART;
 
     @Override
     protected void initDependencies() {
@@ -93,12 +97,14 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         pieChart = (PieChart) findViewById(R.id.pie_chart);
         barChart = (HorizontalBarChart) findViewById(R.id.bar_chart);
         williamBarChart = (HorizontalBarChartView) findViewById(R.id.william_barchart);
+        chartTypeButton = (ImageView) findViewById(R.id.chart_type_button);
     }
 
     @Override
     protected void initListeners() {
         super.initListeners();
         buttonAddTransaction.setOnClickListener(this);
+        chartTypeButton.setOnClickListener(this);
     }
 
     @Override
@@ -106,6 +112,11 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         switch (v.getId()) {
             case R.id.main_fragment_add_transaction_button:
                 startActivity(new Intent(this, AddTransactionActivity.class));
+                break;
+            case R.id.chart_type_button:
+                ChartTypeDialog dialog = new ChartTypeDialog();
+                dialog.setListener(this);
+                dialog.show(getFragmentManager(), "TAG");
                 break;
         }
     }
@@ -131,7 +142,7 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     void initLoader() {
         getLoaderManager().restartLoader(
                 Constants.LoadersID.LOADER_TRANSACTIONS,
-                DatabaseUtils.getTransactionsFromDB(null, String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS * 30), String.valueOf(System.currentTimeMillis()), null),
+                DatabaseUtils.getTransactionsFromDB(null, String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS * 60), String.valueOf(System.currentTimeMillis()), null),
                 this
         ).forceLoad();
     }
@@ -288,9 +299,10 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     public void onLoadFinished(Loader loader, Object data) {
         switch (loader.getId()) {
             case Constants.LoadersID.LOADER_TRANSACTIONS:
-                HashMap<String, Double> categoriesSum = DatabaseUtils.getSumTransactionsByCategories((Cursor) data);
+                categoriesSum = DatabaseUtils.getSumTransactionsByCategories((Cursor) data);
                 Log.e("getSumTransactions", DatabaseUtils.getSumTransactionsByCategories((Cursor) data).toString());
-                showPieChart(categoriesSum);
+
+                showChart(categoriesSum, chartType);
 //                showBarChart(categoriesSum);
 //                showWilliamBarChart(categoriesSum);
                 break;
@@ -300,6 +312,29 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     @Override
     public void onLoaderReset(Loader loader) {
 
+    }
+
+    private void showChart(HashMap<String, Double> categoriesSum, int typeOfChart) {
+        switch (typeOfChart) {
+            case Constants.PIE_CHART:
+                pieChart.setVisibility(View.VISIBLE);
+                williamBarChart.setVisibility(View.GONE);
+                barChart.setVisibility(View.GONE);
+                showPieChart(categoriesSum);
+                break;
+            case Constants.BAR_CHART_MP:
+                pieChart.setVisibility(View.GONE);
+                williamBarChart.setVisibility(View.GONE);
+                barChart.setVisibility(View.VISIBLE);
+                showWilliamBarChart(categoriesSum);
+                break;
+            case Constants.BAR_CHART_WILLIAM:
+                pieChart.setVisibility(View.GONE);
+                williamBarChart.setVisibility(View.VISIBLE);
+                barChart.setVisibility(View.GONE);
+                showBarChart(categoriesSum);
+                break;
+        }
     }
 
     private void showPieChart(HashMap<String, Double> categoriesSum) {
@@ -331,12 +366,11 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         dataset.setValueTextSize(12);
         BarData data = new BarData(labels, dataset);
         barChart.setData(data);
-        barChart.animateY(500);
         barChart.setDescription("");
+        barChart.animateY(500);
     }
 
     private void showWilliamBarChart(HashMap<String, Double> categoriesSum) {
-
         String[] labels = new String[categoriesSum.size()];
         float[] values = new float[categoriesSum.size()];
         int index = 0;
@@ -375,4 +409,9 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         return result;
     }
 
+    @Override
+    public void onChangeType(int type) {
+        chartType = type;
+        initLoader();
+    }
 }

@@ -42,7 +42,7 @@ import java.util.Calendar;
 public class AddTransactionActivity extends Activity implements LoaderManager.LoaderCallbacks, CategoryRecyclerAdapter.OnItemCLickListener,
         View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
-    Button buttonCategory;
+    ImageView buttonCategory;
     EditText editTextSum;
     EditText editTextDescription;
     ArrayList<Category> categories;
@@ -67,7 +67,7 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
     protected void initViews() {
         buttonCalendar = (ImageView) findViewById(R.id.add_transaction_button_date);
         buttonBack = (ImageView) findViewById(R.id.back_button);
-        buttonCategory = (Button) findViewById(R.id.add_transaction_buuton_category);
+        buttonCategory = (ImageView) findViewById(R.id.add_transaction_buuton_category);
         editTextSum = (EditText) findViewById(R.id.add_transaction_edit_text_sum);
         editTextDescription = (EditText) findViewById(R.id.add_transaction_edit_text_description);
         recyclerViewCategory = (RecyclerView) findViewById(R.id.add_transaction_recycler_categoty);

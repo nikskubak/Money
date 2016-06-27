@@ -111,7 +111,7 @@ public class CorrelationRecomandationGenerator {
                     //нужно создать табоицу рекомендаций и заносить туда данные
                     ContentValues values = new ContentValues();
                     values.put(RecommendationContract.DESCRIPTION, "Существует зависимость между категорией " + iterator.getFirstCategory().getName() +
-                            " и категорией" + iterator.getSecondCategory().getName());
+                            " и категорией " + iterator.getSecondCategory().getName());
                     values.put(RecommendationContract.DATE, System.currentTimeMillis());
                     values.put(RecommendationContract.VIEWED, 1);
 

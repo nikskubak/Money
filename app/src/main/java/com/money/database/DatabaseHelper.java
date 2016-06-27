@@ -40,12 +40,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         initDefaultCategories(db,
                 context.getResources().getStringArray(R.array.default_name_categories_gains),
                 context.getResources().getString(R.string.category_type_gain));
-//        initDefaultTransactions(db,
-//                1,
-//                context.getResources().getString(R.string.category_type_cost));
-//        initDefaultTransactions(db,
-//                2,
-//                context.getResources().getString(R.string.category_type_cost));
+        initDefaultTransactions(db,
+                1,
+                context.getResources().getString(R.string.category_type_cost));
+        initDefaultTransactions(db,
+                2,
+                context.getResources().getString(R.string.category_type_cost));
     }
 
     @Override
