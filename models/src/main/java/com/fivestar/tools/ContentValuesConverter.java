@@ -1,8 +1,7 @@
-package com.artjoker.core.database;
+package com.fivestar.tools;
 
 import android.content.ContentValues;
 
-import com.artjoker.core.Validator;
 
 /**
  * Created by alexsergienko on 24.03.15.

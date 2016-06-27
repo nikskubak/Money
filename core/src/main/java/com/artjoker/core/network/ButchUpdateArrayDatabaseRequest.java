@@ -6,7 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.artjoker.core.database.ContentValuesConverter;
+import com.artjoker.core.tools.ContentValuesConverter;
 
 import java.util.ArrayList;
 import java.util.List;

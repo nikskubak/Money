@@ -1,6 +1,5 @@
 package com.money.activities;
 
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateUtils;
@@ -16,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.artjoker.core.activities.AbstractLauncher;
 import com.crashlytics.android.Crashlytics;
 import com.db.chart.Tools;
 import com.db.chart.model.BarSet;
@@ -62,7 +59,7 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by skuba on 28.02.2016.
  */
-public class LauncherActivity extends AbstractLauncher implements View.OnClickListener, LoaderManager.LoaderCallbacks, ChartTypeDialog.ChangeTypeListener {
+public class LauncherActivity extends BaseActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks, ChartTypeDialog.ChangeTypeListener {
 
     Drawer drawer;
     //    Toolbar toolbar;
@@ -76,10 +73,6 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
     HashMap<String, Double> categoriesSum;
     int chartType = Constants.PIE_CHART;
 
-    @Override
-    protected void initDependencies() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,30 +145,6 @@ public class LauncherActivity extends AbstractLauncher implements View.OnClickLi
         return R.layout.launcher_activity;
     }
 
-    @Override
-    protected int getContentViewContainerId() {
-        return 0;
-    }
-
-    @Override
-    protected Fragment getInitFragment() {
-        return null;
-    }
-
-    @Override
-    public void onChange(Fragment fragment) {
-
-    }
-
-    @Override
-    public void onEvent(int type, Bundle data) {
-
-    }
-
-    @Override
-    protected void initSocialNetworks() {
-
-    }
 
     void initDrawer() {
 //        SecondaryDrawerItem itemMain = new SecondaryDrawerItem().withName(R.string.item_drawer_main).withIdentifier(Constants.ITEM_DRAWER_MAIN);

@@ -4,11 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Money.iml" filepath="$PROJECT_DIR$/Money.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/color-tool/color-tool.iml" filepath="$PROJECT_DIR$/color-tool/color-tool.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core-tool/core-tool.iml" filepath="$PROJECT_DIR$/core-tool/core-tool.iml" />
       <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fragments-tool/fragments-tool.iml" filepath="$PROJECT_DIR$/fragments-tool/fragments-tool.iml" />
       <module fileurl="file://$PROJECT_DIR$/models/models.iml" filepath="$PROJECT_DIR$/models/models.iml" />
     </modules>
   </component>

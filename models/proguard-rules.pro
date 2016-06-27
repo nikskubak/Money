@@ -16,6 +16,5 @@
 #   public *;
 #}
 #Models
--keep class com.stockroompro.models.** { *; }
--keep class com.stockroompro.utils.** { *; }
--keep class com.stockroompro.modelsFresfline.** { *; }
+-keep class com.fivestar.models.** { *; }
+-keep class com.fivestar.utils.** { *; }

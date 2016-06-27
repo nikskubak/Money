@@ -5,8 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.artjoker.core.database.CommonDBQueries;
-import com.artjoker.core.database.ContentValuesConverter;
+import com.artjoker.core.tools.CommonDBQueries;
+import com.artjoker.core.tools.ContentValuesConverter;
 
 /**
  * Created by alexsergienko on 24.03.15.

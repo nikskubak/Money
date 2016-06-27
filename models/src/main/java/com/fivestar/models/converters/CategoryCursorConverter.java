@@ -2,9 +2,9 @@ package com.fivestar.models.converters;
 
 import android.database.Cursor;
 
-import com.artjoker.core.database.AbstractCursorConverter;
 import com.fivestar.models.Category;
 import com.fivestar.models.columns.CategoryColumns;
+import com.fivestar.tools.AbstractCursorConverter;
 
 /**
  * Created by skuba on 19.03.2016.

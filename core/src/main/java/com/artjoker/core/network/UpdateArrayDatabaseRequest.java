@@ -4,8 +4,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 
-import com.artjoker.core.database.CommonDBQueries;
-import com.artjoker.core.database.ContentValuesConverter;
+import com.artjoker.core.tools.CommonDBQueries;
+import com.artjoker.core.tools.ContentValuesConverter;
 
 import java.util.List;
 

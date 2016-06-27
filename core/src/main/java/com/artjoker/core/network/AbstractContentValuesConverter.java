@@ -1,6 +1,6 @@
 package com.artjoker.core.network;
 
-import com.artjoker.core.database.ContentValuesConverter;
+import com.artjoker.core.tools.ContentValuesConverter;
 
 /**
  * Created by alexsergienko on 25.03.15.

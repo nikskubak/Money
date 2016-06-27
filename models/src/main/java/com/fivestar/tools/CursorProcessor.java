@@ -1,4 +1,4 @@
-package com.artjoker.core.database;
+package com.fivestar.tools;
 
 import android.database.Cursor;
 

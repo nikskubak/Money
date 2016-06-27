@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -20,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.artjoker.core.fragments.AbstractBasic;
 import com.fivestar.models.Category;
 import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.models.contracts.CategoryContract;
@@ -28,8 +25,6 @@ import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
-import com.money.activities.BaseActivity;
-import com.money.adapters.CursorRecyclerViewAdapter;
 
 import java.util.ArrayList;
 

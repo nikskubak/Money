@@ -1,4 +1,4 @@
-package com.artjoker.core.database.constants;
+package com.fivestar.tools.constants;
 
 /**
  * Created by alexsergienko on 18.03.15.

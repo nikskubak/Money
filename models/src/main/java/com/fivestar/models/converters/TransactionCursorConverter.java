@@ -2,10 +2,10 @@ package com.fivestar.models.converters;
 
 import android.database.Cursor;
 
-import com.artjoker.core.database.AbstractCursorConverter;
 import com.fivestar.models.Transaction;
 import com.fivestar.models.columns.CategoryColumns;
 import com.fivestar.models.columns.TransactionColumns;
+import com.fivestar.tools.AbstractCursorConverter;
 import com.fivestar.utils.SQLiteHelper;
 
 /**

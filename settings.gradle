@@ -1,1 +1,1 @@
-include ':app', ':core', ':core-tool', ':fragments-tool', ':color-tool', ':models', ':database'
+include ':app', ':models', ':database'
