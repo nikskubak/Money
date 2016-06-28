@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
+import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,7 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
     private CategoryRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ImageView buttonBack;
+    private int categoryColor;
 
 
     @Override
@@ -110,7 +113,8 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
                 insertCategory();
                 break;
             case R.id.back_button:
-                onBackPressed();
+//                onBackPressed();
+                showColorDialog();
                 break;
         }
     }
@@ -183,5 +187,22 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
             }
         });
         ad.show();
+    }
+
+
+
+    private void showColorDialog() {
+        new SpectrumDialog.Builder(this)
+                .setColors(R.array.full_palette)
+                .setSelectedColorRes(R.color.Color_1)
+                .setTitle("Выберите цвет категории")
+                .setDismissOnColorSelected(false)
+                .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
+                    @Override public void onColorSelected(boolean positiveResult, @ColorInt int color) {
+                        if (positiveResult) {
+                           categoryColor = color;
+                        }
+                    }
+                }).build().show(getSupportFragmentManager(), "tag");
     }
 }

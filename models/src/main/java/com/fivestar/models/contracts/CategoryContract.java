@@ -16,6 +16,8 @@ public interface CategoryContract extends CategoryColumns, DatabaseTypes {
     String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " ("
             + ID + " " + INTEGER + " PRIMARY KEY AUTOINCREMENT , "
             + NAME + " " + TEXT + " ,"
+            + COLOR + " " + INTEGER + " ,"
+            + ICON + " " + INTEGER + " ,"
             + TYPE + " " + TEXT
             + " );";
 

@@ -7,6 +7,24 @@ public class Category {
     int id;
     String name;
     String type;
+    int color;
+    int icon;
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
 
     public int getId() {
         return id;

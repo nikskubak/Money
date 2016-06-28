@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+<color name="Color_1">#6e6e6e</color>
+<color name="Color_2">#df013a</color>
+<color name="Color_3">#df0174</color>
+<color name="Color_4">#df01a5</color>
+<color name="Color_5">#df01d7</color>
+<color name="Color_6">#a901db</color>
+<color name="Color_7">#7401df</color>
+<color name="Color_8">#3a01df</color>
+<color name="Color_9">#0101df</color>
+<color name="Color_10">#013adf</color>
+<color name="Color_11">#0174df</color>
+<color name="Color_12">#01a9db</color>
+<color name="Color_13">#01dfd7</color>
+<color name="Color_14">#01dfa5</color>
+<color name="Color_15">#01df74</color>
+<color name="Color_16">#01df3a</color>
+<color name="Color_17">#01df01</color>
+<color name="Color_18">#3adf00</color>
+<color name="Color_19">#74df00</color>
+<color name="Color_20">#a5df00</color>
+<color name="Color_21">#d7df01</color>
+<color name="Color_22">#dba901</color>
+<color name="Color_23">#df7401</color>
+<color name="Color_24">#df3a01</color>
+<color name="Color_25">#df0101</color>
+
+    <array name="full_palette">
+        <item>@color/Color_1</item>
+        <item>@color/Color_2</item>
+        <item>@color/Color_3</item>
+        <item>@color/Color_4</item>
+        <item>@color/Color_5</item>
+        <item>@color/Color_6</item>
+        <item>@color/Color_7</item>
+        <item>@color/Color_8</item>
+        <item>@color/Color_9</item>
+        <item>@color/Color_10</item>
+        <item>@color/Color_11</item>
+        <item>@color/Color_12</item>
+        <item>@color/Color_13</item>
+        <item>@color/Color_14</item>
+        <item>@color/Color_15</item>
+        <item>@color/Color_16</item>
+        <item>@color/Color_17</item>
+        <item>@color/Color_18</item>
+        <item>@color/Color_19</item>
+        <item>@color/Color_20</item>
+        <item>@color/Color_21</item>
+        <item>@color/Color_22</item>
+        <item>@color/Color_23</item>
+        <item>@color/Color_24</item>
+        <item>@color/Color_25</item>
+    </array>
+
+    <color name="bright_pink">#FF007F</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#FF7F00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="chartreuse">#7FFF00</color>
+    <color name="green">#00FF00</color>
+    <color name="spring_green">#00FF7F</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="azure">#007FFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+
+
+    <array name="rainbow">
+        <item>@color/bright_pink</item>
+        <item>@color/red</item>
+        <item>@color/orange</item>
+        <item>@color/yellow</item>
+        <item>@color/chartreuse</item>
+        <item>@color/green</item>
+        <item>@color/spring_green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+    </array>
+
+
+</resources>

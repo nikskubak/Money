@@ -73,15 +73,6 @@ public class LauncherActivity extends BaseActivity implements View.OnClickListen
     HashMap<String, Double> categoriesSum;
     int chartType = Constants.PIE_CHART;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
-//        FirebaseCrash.report(new Exception("Idi nahuy"));
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-    }
-
     @Override
     protected void initViews() {
         super.initViews();
