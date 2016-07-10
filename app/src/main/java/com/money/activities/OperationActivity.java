@@ -100,10 +100,11 @@ public class OperationActivity extends BaseActivity implements LoaderManager.Loa
     }
 
     void startRecycler(Cursor cursor) {
-        layoutManager = new LinearLayoutManager(this);
+        DatabaseUtils.logCursor(cursor);
         adapter = new CostsRecyclerAdapter(cursor, this);
-        recyclerView.setAdapter(adapter);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -142,6 +143,7 @@ public class OperationActivity extends BaseActivity implements LoaderManager.Loa
                     categories.add(converter.getObject());
                 }
                 showDialogWithCategory();
+                break;
         }
     }
 
