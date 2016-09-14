@@ -64,7 +64,7 @@ public class LauncherActivity extends BaseActivity implements View.OnClickListen
     Drawer drawer;
     //    Toolbar toolbar;
     ImageView filterButton;
-    FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseAnalytics mFirebaseAnalytics;
     FloatingActionButton buttonAddTransaction;
     PieChart pieChart;
     HorizontalBarChart barChart;
@@ -112,9 +112,20 @@ public class LauncherActivity extends BaseActivity implements View.OnClickListen
 //        Cursor cursor = getContentResolver().query(TransactionContract.CONTENT_URI, null, null, new String[]{String.valueOf(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS * 30), String.valueOf(System.currentTimeMillis())}, null);
 //        cursor.moveToFirst();
 //        Log.e("sum123456", " " + cursor.getDouble(0));
-
+        startrAnalytic();
         initDrawer();
         startRecomandationService();
+    }
+
+    private void startrAnalytic() {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        logAnalyticsEvent();
+    }
+
+    private void logAnalyticsEvent() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.click_event_add_transaction_text));
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     @Override

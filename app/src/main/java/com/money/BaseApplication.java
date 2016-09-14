@@ -18,6 +18,6 @@ public class BaseApplication extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
 //        FirebaseCrash.report(new Exception("BaseActivity"));
-        FirebaseAnalytics.getInstance(this);
+//        FirebaseAnalytics.getInstance(this);
     }
 }
