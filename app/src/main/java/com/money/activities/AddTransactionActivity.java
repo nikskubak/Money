@@ -24,10 +24,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.fivestar.models.Category;
+import com.fivestar.models.Transaction;
 import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
@@ -219,13 +222,28 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
 
     void insertTransaction(Category category) {
         ContentValues values = new ContentValues();
+        Transaction transaction = new Transaction();
         values.put(TransactionColumns.CATEGORY, category.getId());
+        transaction.setCategoryId(category.getId());
         values.put(TransactionColumns.MONEY, editTextSum.getText().toString());
+        transaction.setMoney(Double.valueOf(editTextSum.getText().toString()));
         values.put(TransactionColumns.DATE, enteredDate == null ? String.valueOf(System.currentTimeMillis()) : enteredDate);
+        transaction.setDate(Long.valueOf(enteredDate == null ? String.valueOf(System.currentTimeMillis()) : enteredDate));
         values.put(TransactionColumns.TYPE, category.getType());
+        transaction.setType(category.getType());
         values.put(TransactionColumns.DESCRIPTION, editTextDescription.getText().toString());
+        transaction.setDescription(editTextDescription.getText().toString());
         getContentResolver().insert(TransactionContract.CONTENT_URI, values);
+        saveTransactionToFirebase(transaction);
     }
+
+    private void saveTransactionToFirebase(Transaction transaction){
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference transactionReference = database.getReference(TransactionContract.TABLE_NAME);
+        transactionReference.setValue(transaction);
+    }
+
 
     @Override
     public void onClick(View v) {

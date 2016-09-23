@@ -32,6 +32,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -82,6 +84,7 @@ public class LauncherActivity extends BaseActivity implements View.OnClickListen
         barChart = (HorizontalBarChart) findViewById(R.id.bar_chart);
         williamBarChart = (HorizontalBarChartView) findViewById(R.id.william_barchart);
         chartTypeButton = (ImageView) findViewById(R.id.chart_type_button);
+        Log.e("time", " " + System.currentTimeMillis());
     }
 
     @Override
