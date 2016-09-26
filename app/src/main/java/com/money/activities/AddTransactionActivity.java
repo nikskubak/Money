@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,11 +28,10 @@ import com.fivestar.models.columns.TransactionColumns;
 import com.fivestar.models.contracts.CategoryContract;
 import com.fivestar.models.contracts.TransactionContract;
 import com.fivestar.models.converters.CategoryCursorConverter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
+import com.money.database.FirebaseDatabaseHelper;
 import com.money.views.CustomKeyboardView;
 
 import java.util.ArrayList;
@@ -234,16 +232,8 @@ public class AddTransactionActivity extends Activity implements LoaderManager.Lo
         values.put(TransactionColumns.DESCRIPTION, editTextDescription.getText().toString());
         transaction.setDescription(editTextDescription.getText().toString());
         getContentResolver().insert(TransactionContract.CONTENT_URI, values);
-        saveTransactionToFirebase(transaction);
+        FirebaseDatabaseHelper.saveNewObjectToFirebase(transaction, TransactionContract.TABLE_NAME);
     }
-
-    private void saveTransactionToFirebase(Transaction transaction){
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference transactionReference = database.getReference(TransactionContract.TABLE_NAME);
-        transactionReference.setValue(transaction);
-    }
-
 
     @Override
     public void onClick(View v) {

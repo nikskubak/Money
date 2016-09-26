@@ -26,6 +26,7 @@ import com.fivestar.models.converters.CategoryCursorConverter;
 import com.money.CategoryRecyclerAdapter;
 import com.money.Constants;
 import com.money.R;
+import com.money.database.FirebaseDatabaseHelper;
 import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
@@ -49,12 +50,12 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
 
     @Override
     protected void initViews() {
-        radioCost = (RadioButton)findViewById(R.id.add_category_radio_button_cost);
+        radioCost = (RadioButton) findViewById(R.id.add_category_radio_button_cost);
         radioGain = (RadioButton) findViewById(R.id.add_category_radio_button_gain);
-        editTextCategoryName = (EditText)findViewById(R.id.add_category_edit_text_name);
-        buttonAddCategory = (Button)findViewById(R.id.add_category_button_add);
-        categoryRecyclerView = (RecyclerView)findViewById(R.id.add_category_recycler_view);
-        buttonBack = (ImageView)findViewById(R.id.back_button);
+        editTextCategoryName = (EditText) findViewById(R.id.add_category_edit_text_name);
+        buttonAddCategory = (Button) findViewById(R.id.add_category_button_add);
+        categoryRecyclerView = (RecyclerView) findViewById(R.id.add_category_recycler_view);
+        buttonBack = (ImageView) findViewById(R.id.back_button);
     }
 
     @Override
@@ -134,7 +135,8 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
             newCategory.setName(editTextCategoryName.getText().toString());
             newCategory.setType(categoryType);
             String selection = CategoryColumns.NAME + "=? AND " + CategoryColumns.TYPE + "=?";
-            String[] selectionArgs = new String[]{editTextCategoryName.getText().toString(),categoryType};
+            String[] selectionArgs = new String[]{editTextCategoryName.getText().toString(), categoryType};
+            FirebaseDatabaseHelper.saveNewObjectToFirebase(newCategory, CategoryContract.TABLE_NAME);
             getContentResolver().update(CategoryContract.CONTENT_URI, values, selection, selectionArgs);
             getLoaderManager().restartLoader(Constants.LoadersID.LOADER_CATEGORIES, null, this);
             editTextCategoryName.setText("");
@@ -170,8 +172,8 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String selection = CategoryColumns.NAME + "=? AND " + CategoryColumns.TYPE + "=?";
-                String[] selectionArgs = new String[]{category.getName(),category.getType()};
-                getContentResolver().delete(CategoryContract.CONTENT_URI,selection,selectionArgs);
+                String[] selectionArgs = new String[]{category.getName(), category.getType()};
+                getContentResolver().delete(CategoryContract.CONTENT_URI, selection, selectionArgs);
             }
         });
         ad.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
@@ -190,7 +192,6 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
     }
 
 
-
     private void showColorDialog() {
         new SpectrumDialog.Builder(this)
                 .setColors(R.array.full_palette)
@@ -198,9 +199,10 @@ public class AddCategoryActivity extends BaseActivity implements LoaderManager.L
                 .setTitle("Выберите цвет категории")
                 .setDismissOnColorSelected(false)
                 .setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
-                    @Override public void onColorSelected(boolean positiveResult, @ColorInt int color) {
+                    @Override
+                    public void onColorSelected(boolean positiveResult, @ColorInt int color) {
                         if (positiveResult) {
-                           categoryColor = color;
+                            categoryColor = color;
                         }
                     }
                 }).build().show(getSupportFragmentManager(), "tag");
