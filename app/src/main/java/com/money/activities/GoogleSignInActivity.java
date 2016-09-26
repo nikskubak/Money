@@ -104,6 +104,7 @@ public class GoogleSignInActivity extends BaseGoogleSignInActivity implements
     // [START on_start_add_listener]
     @Override
     public void onStart() {
+
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
